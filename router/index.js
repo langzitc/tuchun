@@ -1,4 +1,6 @@
 import express from 'express';
+import Validate from '../api/service/validate.js';
+import Auth from '../api/service/auth.js';
 import User from '../api/user';
 import Public from '../api/public';
 import Chanel from '../api/chanel';
@@ -14,6 +16,8 @@ router.get("/",(req,res)=>{
         keywords: 'tuchun web'
     });    
 })
+router.use("/api/*",Auth);
+router.use("/api/:route/:param",Validate);
 router.use("/api/public/:param",Public);
 router.use("/api/user/:param",User);
 router.use("/api/chanel/:param",Chanel);

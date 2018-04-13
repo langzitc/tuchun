@@ -1,24 +1,35 @@
 import express from 'express'
 import path from 'path'
+import fs from 'fs'
+import morgan from 'morgan'
 import router from './router/index.js'
 import bodyParser from 'body-parser'
+import { RedisClient } from './until/index.js'
 import session from 'express-session'
-// import './data/index.js'
+import './data/index.js'
+const RedisStore = require('connect-redis')(session);
 const app = express();
 app.use(session({
-    secret: 'tuch',
+	secret: 'tuch',
+	name: 'tuch_session',
     cookie: {maxAge: 1800000},  //设置maxAge是1800000ms，即30分钟后session和相应的cookie失效过期
     rolling: true,
     resave:true,
-    saveUninitialized: false
+	saveUninitialized: false,
+	store: new RedisStore({
+		client: RedisClient,
+		prefix: 'tuch_session'		
+	})
 }));
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/logger.log'), {flags: 'a'});
+app.use(morgan('short', {stream: accessLogStream}));
 app.use("/apidoc",express.static('apidoc'));
 app.use("/upload",express.static(path.join("../", 'upload')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", 'ejs');
 app.set('views', __dirname + '/page');
-app.all('/api', function(req, res, next) {
+app.all('/api/:chanel/*', function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");

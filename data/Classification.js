@@ -20,8 +20,6 @@ const Classification = Connect.define('classification', {
 }, 
 {
   freezeTableName: false, // Model 对应的表名将与model名相同
-  createdAt: true,
-  updatedAt: true,
   tableName: `${config.dbprefix}classification`
 });
 export default Classification;

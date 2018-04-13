@@ -58,8 +58,9 @@ const Web = Connect.define('web', {
 }, 
 {
   freezeTableName: false, // Model 对应的表名将与model名相同
-  createdAt: false,
-  updatedAt: false,
+  createdAt: 'create_at',
+  updatedAt: 'update_at',
+  timestamps: true,
   tableName: `${config.dbprefix}web`
 });
 export default Web;

@@ -23,8 +23,9 @@ const Operation = Connect.define('operation', {
 }, 
 {
   freezeTableName: false, // Model 对应的表名将与model名相同
-  createdAt: true,
-  updatedAt: true,
+  createdAt: 'create_at',
+  updatedAt: 'update_at',
+  timestamps: true,
   tableName: `${config.dbprefix}operation`
 });
 export default Operation;

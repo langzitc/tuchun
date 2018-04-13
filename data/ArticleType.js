@@ -19,8 +19,6 @@ const ArticleType = Connect.define('articleType', {
 }, 
 {
   freezeTableName: false, // Model 对应的表名将与model名相同
-  createdAt: false,
-  updatedAt: false,
   tableName: `${config.dbprefix}article_type`
 });
 export default ArticleType;

@@ -37,8 +37,8 @@ const User = Connect.define('user', {
   	type: Sequelize.STRING(100),
   },
   flag: {
-  	type: Sequelize.BOOLEAN,
-  	defaultValue: false
+  	type: Sequelize.INTEGER,
+  	defaultValue: 1
   }
 }, 
 {
@@ -47,4 +47,14 @@ const User = Connect.define('user', {
   updatedAt: true,
   tableName: `${config.dbprefix}user`
 });
+User.login = (name,pwd) => {
+  return User.find({
+    where: {
+      password: pwd,
+      $and: {
+        $or: [{tel:name},{email:name}]
+      }
+    }
+  })
+}
 export default User;

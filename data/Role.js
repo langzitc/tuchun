@@ -20,8 +20,9 @@ const Role = Connect.define('role', {
 }, 
 {
   freezeTableName: false,
-  createdAt: false,
-  updatedAt: false,
+  createdAt: 'create_at',
+  updatedAt: 'update_at',
+  timestamps: true,
   tableName: `${config.dbprefix}role` 
 });
 export default Role;

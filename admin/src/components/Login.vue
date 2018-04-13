@@ -10,7 +10,7 @@
                 <Input size="large" type="password" v-model="models.password" placeholder="请输入密码"></Input>
             </FormItem>
             <FormItem>
-                <Button size="large" type="info" long @click="login">登录</Button>
+                <Button size="large" type="info" long @click="login" :loading="isLoading">登录</Button>
             </FormItem>                        
         </Form>
       </div>
@@ -34,13 +34,26 @@ export default {
                   required: true,
                   message: '密码不能为空'
               }]
-          }
+          },
+          isLoading: false
       }
   },
   methods: {
       login () {
-          this.$router.push({
-              name: 'Home'
+          this.$refs['login-form'].validate(valid=>{
+              if(valid) {
+                  this.isLoading = true;
+                  this.$store.dispatch("login",this.models).then(msg=>{
+                    this.$Message.success(msg);  
+                    this.$router.push({
+                        name: 'Home'
+                    })                      
+                  }).catch(msg=>{
+                      this.$Message.error(msg);
+                  }).complete(()=>{
+                      this.isLoading = false;
+                  });
+              }
           })
       }
   },

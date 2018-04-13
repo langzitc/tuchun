@@ -57,73 +57,14 @@
             </Header>
             <Layout>
                 <Sider hide-trigger :style="{background: '#fff'}">
-                    <Menu active-name="1-2" theme="dark" width="auto" :open-names="['1']">
-                        <Submenu name="1">
+                    <Menu :active-name="index" theme="dark" width="auto" @on-select="menuSelect" :open-names="openNames">
+                        <Submenu :name="el.id" v-for="el in Menu" :key="el.id">
                             <template slot="title">
-                                <Icon type="ios-navigate"></Icon>
-                                用户管理
+                                <Icon :type="el.icon"></Icon>
+                                {{el.label}}
                             </template>
-                            <MenuItem name="1-1">Option 1</MenuItem>
-                            <MenuItem name="1-2">Option 2</MenuItem>
-                            <MenuItem name="1-3">Option 3</MenuItem>
-                        </Submenu>                        
-                        <Submenu name="1">
-                            <template slot="title">
-                                <Icon type="ios-navigate"></Icon>
-                                栏目管理
-                            </template>
-                            <MenuItem name="1-1">Option 1</MenuItem>
-                            <MenuItem name="1-2">Option 2</MenuItem>
-                            <MenuItem name="1-3">Option 3</MenuItem>
-                        </Submenu>
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-keypad"></Icon>
-                                文章管理
-                            </template>
-                            <MenuItem name="2-1">Option 1</MenuItem>
-                            <MenuItem name="2-2">Option 2</MenuItem>
-                        </Submenu>
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-keypad"></Icon>
-                                小说管理
-                            </template>
-                            <MenuItem name="2-1">Option 1</MenuItem>
-                            <MenuItem name="2-2">Option 2</MenuItem>
-                        </Submenu>                        
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                评论管理
-                            </template>
-                            <MenuItem name="3-1">Option 1</MenuItem>
-                            <MenuItem name="3-2">Option 2</MenuItem>
-                        </Submenu>
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                系统设置
-                            </template>
-                            <MenuItem name="3-1">Option 1</MenuItem>
-                            <MenuItem name="3-2">Option 2</MenuItem>
-                        </Submenu>
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                数据库管理
-                            </template>
-                            <MenuItem name="3-1">Option 1</MenuItem>
-                            <MenuItem name="3-2">Option 2</MenuItem>
-                        </Submenu>
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                采集管理
-                            </template>
-                            <MenuItem name="3-1">Option 1</MenuItem>
-                            <MenuItem name="3-2">Option 2</MenuItem>
-                        </Submenu>                                                                        
+                            <MenuItem v-if="el.children&&el.children.length" v-for="el2 in el.children" :key="el2.id" :name="el2.id">{{el2.label}}</MenuItem>
+                        </Submenu>                                                                                               
                     </Menu>
                 </Sider>
                 <Layout :style="{padding: '0 24px 24px'}">
@@ -133,7 +74,9 @@
                         <BreadcrumbItem>Layout</BreadcrumbItem>
                     </Breadcrumb>
                     <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
-                        Content
+                        <transition name="app">
+                            <router-view/>
+                        </transition>  
                     </Content>
                 </Layout>
             </Layout>
@@ -141,7 +84,39 @@
     </div>
 </template>
 <script>
+    import Menu from '../menu.js'
     export default {
-        
+        data () {
+            return {
+                Menu,
+                index: 11,
+                openNames: [1]
+            }
+        },
+        methods: {
+            menuSelect (name) {
+                let c;
+                Menu.forEach(e=>{
+                    if(e.id == name){
+                        if(e.component){
+                            c = e.component;
+                        }
+                    }else{
+                        if(e.children){
+                            e.children.forEach(e2=>{
+                                if(e2.id == name){
+                                    c = e2.component;
+                                }
+                            })                            
+                        }
+                    }
+                })
+                if(c){
+                    this.$router.push({
+                        name: c
+                    });                     
+                }
+            }
+        }
     }
 </script>

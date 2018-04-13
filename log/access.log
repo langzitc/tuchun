@@ -1,0 +1,2 @@
+::1 - GET /api/public/user_destory HTTP/1.1 304 - - 5.734 ms
+::1 - GET / HTTP/1.1 304 - - 26.945 ms

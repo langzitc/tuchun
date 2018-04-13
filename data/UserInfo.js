@@ -2,11 +2,12 @@ import { Connect } from "../until/index.js";
 import Sequelize from "sequelize";
 import config from '../config/db.js';
 const UserInfo = Connect.define('userInfo', {
-  uid: {
+  id: {
   	type: Sequelize.INTEGER,
   	field: "id",
   	primaryKey: true,
-  	allowNull: false
+    allowNull: false,
+    autoIncrement: true
   },
   birthday: {
     type: Sequelize.STRING(50)
@@ -59,8 +60,9 @@ const UserInfo = Connect.define('userInfo', {
 }, 
 {
   freezeTableName: false, // Model 对应的表名将与model名相同
-  createdAt: true,
-  updatedAt: true,
+  createdAt: 'create_at',
+  updatedAt: 'update_at',
+  timestamps: true,
   tableName: `${config.dbprefix}user_info`
 });
 export default UserInfo;

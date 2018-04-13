@@ -28,11 +28,6 @@ const Chanel = Connect.define('chanel', {
     allowNull: false,
     defaultValue: 1   
   },
-  chanel_type: {
-      type: Sequelize.INTEGER,
-      defaultValue: 0,
-      allowNull: false
-  },
   title: {
     type: Sequelize.STRING(100),
   },
@@ -53,8 +48,9 @@ const Chanel = Connect.define('chanel', {
 }, 
 {
   freezeTableName: false, // Model 对应的表名将与model名相同
-  createdAt: true,
-  updatedAt: true,
+  createdAt: 'create_at',
+  updatedAt: 'update_at',
+  timestamps: true,
   tableName: `${config.dbprefix}chanel`
 });
 export default Chanel;

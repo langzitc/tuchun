@@ -23,7 +23,19 @@ export default new Router({
       name: 'Home',
   		component: function (resolve) {
   			require(['../components/Home.vue'],resolve);
-  		}
+      },
+      children: [{
+        path: '',
+        redirect: {
+          name: 'UserList'
+        }
+      },{
+        path: 'userlist',
+        name: 'UserList',
+        component: function (resolve) {
+          require(['../components/UserList.vue'],resolve);
+        },        
+      }]
     }        
   ]
 })

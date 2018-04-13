@@ -33,14 +33,6 @@ const Article = Connect.define('article', {
       allowNull: false,
       defaultValue: 1
   },   
-  type_id: {
-      type: Sequelize.INTEGER,
-      defaultValue: 1
-  },
-  chanel_id: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  },
   img: {
       type: Sequelize.STRING(100)
   },
@@ -50,8 +42,9 @@ const Article = Connect.define('article', {
 }, 
 {
   freezeTableName: false, // Model 对应的表名将与model名相同
-  createdAt: true,
-  updatedAt: true,
+  createdAt: 'create_at',
+  updatedAt: 'update_at',
+  timestamps: true,
   tableName: `${config.dbprefix}article`
 });
 export default Article;
