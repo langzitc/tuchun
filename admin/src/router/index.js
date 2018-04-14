@@ -20,7 +20,6 @@ export default new Router({
     },
     {
       path: '/home',
-      name: 'Home',
   		component: function (resolve) {
   			require(['../components/Home.vue'],resolve);
       },
@@ -34,7 +33,10 @@ export default new Router({
         name: 'UserList',
         component: function (resolve) {
           require(['../components/UserList.vue'],resolve);
-        },        
+        }, 
+        meta: {
+        	title: '用户列表'
+        }
       }]
     }        
   ]

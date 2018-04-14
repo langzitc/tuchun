@@ -46,7 +46,7 @@ export default {
                   this.$store.dispatch("login",this.models).then(msg=>{
                     this.$Message.success(msg);  
                     this.$router.push({
-                        name: 'Home'
+                        path: '/home'
                     })                      
                   }).catch(msg=>{
                       this.$Message.error(msg);

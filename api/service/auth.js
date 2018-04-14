@@ -3,9 +3,11 @@ const exincludePath = [
     "public/admin_login",
     "public/user_login",
     "public/user_register",
-    "public/test"
+    "public/test",
+    "user/test"
 ]
 export default function Auth (req,res,next) {
+    console.log(req.session.sid)
     if(!req.session.sid){
         req.session.sid = md5(req.ip+(new Date()).getTime());
     }

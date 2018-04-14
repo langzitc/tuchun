@@ -69,9 +69,8 @@
                 </Sider>
                 <Layout :style="{padding: '0 24px 24px'}">
                     <Breadcrumb :style="{margin: '24px 0'}">
-                        <BreadcrumbItem>Home</BreadcrumbItem>
-                        <BreadcrumbItem>Components</BreadcrumbItem>
-                        <BreadcrumbItem>Layout</BreadcrumbItem>
+                    	<BreadcrumbItem :to="{ path: '/home' }">首页</BreadcrumbItem>
+                        <BreadcrumbItem v-for="(el,index) in routeList" :to="{ name: el.name }" :key="index">{{el.meta.title}}</BreadcrumbItem>
                     </Breadcrumb>
                     <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
                         <transition name="app">
@@ -85,6 +84,7 @@
 </template>
 <script>
     import Menu from '../menu.js'
+    import { mapState } from 'vuex'
     export default {
         data () {
             return {
@@ -93,6 +93,11 @@
                 openNames: [1]
             }
         },
+		computed: {
+			...mapState({
+				routeList: state => state.routes
+			})
+		},        
         methods: {
             menuSelect (name) {
                 let c;

@@ -6,9 +6,10 @@ export default async function (req,res,next) {
         case "test":  
             res.json({
                 code: 200,
-                msg: 'test'
+                msg: req.session.sid,
+                user: req.session.user
             })
-        break;
+        break;       
         case "user_login": 
             let user = await User.login(req.body.username,md5(req.body.password));
             req.session.user = user.dataValues;

@@ -6,6 +6,7 @@ import router from './router/index.js'
 import bodyParser from 'body-parser'
 import { RedisClient } from './until/index.js'
 import session from 'express-session'
+import { SystemTask } from './task'
 import './data/index.js'
 const RedisStore = require('connect-redis')(session);
 const app = express();
@@ -30,7 +31,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", 'ejs');
 app.set('views', __dirname + '/page');
 app.all('/api/:chanel/*', function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Origin", "http://localhost:8082");
+	res.header('Access-Control-Allow-Credentials', 'true');
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
 	res.header("X-Powered-By",' 3.2.1');
@@ -39,3 +41,4 @@ app.all('/api/:chanel/*', function(req, res, next) {
 });
 app.use('/',router);
 app.listen(4000);
+SystemTask();

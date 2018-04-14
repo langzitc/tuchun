@@ -35,7 +35,9 @@ export default {
                 key: 'nicheng'
             },{
                 title: '状态',
-                key: 'flag'
+                render (h,r) {
+                	return h('span',r.row.flag === 1 ? '可用' : '禁用')
+                }
             }],
             data: [],
             loading: false,
@@ -52,7 +54,7 @@ export default {
     methods: {
         loadData () {
             this.loading = true;
-            this.$http.post('/public/user_list',{
+            this.$http.post('/user/list_user',{
                 pageSize: this.pageSize,
                 page: this.page
             }).then(res=>{
@@ -69,7 +71,7 @@ export default {
         }
     },
     mounted () {
-
+				this.loadData();
     }
 }
 </script>

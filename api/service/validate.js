@@ -44,6 +44,15 @@ const rules = {
         name: 'password',
         required: true,
         type: 'string'
+    }],
+    list_user: [{
+        name: 'page',
+        required: false,
+        type: 'number'
+    },{
+        name: 'pageSize',
+        required: false,
+        type: 'number'
     }]
 }
 export default function Validate (req,res,next) {
@@ -52,10 +61,14 @@ export default function Validate (req,res,next) {
         let arr = [];
         for(let r of el) {
             if(r.required&&!req.body[r.name]) {
-                arr.push(errorResult.required(r.name));
+                arr.push(errorResult.required(r.name));  
+                break;            
+            }
+            if(req.body[r.name]) {
                 if(r.type&&typeof req.body[r.name] !== r.type) {
                     arr.push(errorResult.type(r.name,r.type));
-                }                
+                    break;
+                }                  
             }
         }    
         if (arr.length) {
