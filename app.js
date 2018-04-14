@@ -8,6 +8,21 @@ import { RedisClient } from './until/index.js'
 import session from 'express-session'
 import { SystemTask } from './task'
 import './data/index.js'
+Date.prototype.Format = function (fmt) { //author: meizz
+	var o = {
+	  "M+": this.getMonth() + 1, //月份
+	  "d+": this.getDate(), //日
+	  "h+": this.getHours(), //小时
+	  "m+": this.getMinutes(), //分
+	  "s+": this.getSeconds(), //秒
+	  "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+	  "S": this.getMilliseconds() //毫秒
+	};
+	if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	for (var k in o)
+	  if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	return fmt;
+}
 const RedisStore = require('connect-redis')(session);
 const app = express();
 app.use(session({
@@ -25,7 +40,7 @@ app.use(session({
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/logger.log'), {flags: 'a'});
 app.use(morgan('short', {stream: accessLogStream}));
 app.use("/apidoc",express.static('apidoc'));
-app.use("/upload",express.static(path.join("../", 'upload')));
+app.use("/upload",express.static(path.join("./", 'upload')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", 'ejs');
@@ -41,4 +56,4 @@ app.all('/api/:chanel/*', function(req, res, next) {
 });
 app.use('/',router);
 app.listen(4000);
-SystemTask();
+//SystemTask();

@@ -50,17 +50,10 @@ let init = async () => {
         throw new Error(e)
     }
 }
-Connect.sync({force: false}).then(function () {
+Connect.sync({force: true}).then(function () {
     console.log("----------------------");
     console.log("数据库同步成功");
     console.log("----------------------");
-    //init();
-    // setTimeout(async ()=>{
-    //     let user = await User.findById(1);
-    //     user.update({
-    //         weixin: '18782913591'
-    //     })
-    //     console.log("gengxin");
-    // },5000)     
+    init();    
 });
 export { User, Role, Article, ArticleType, Chanel, ChanelType, Classification, Operation, RoleOperation, Talk, UserInfo, UserOperation, Web }
