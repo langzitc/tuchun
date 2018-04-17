@@ -17,6 +17,21 @@ export default [{
         icon: 'ios-navigate',
         label: '栏目列表',
         component: 'ChanelList'
+    },{
+    	id: 22,
+    	icon: 'plus',
+    	label: '添加栏目',
+    	component: 'AddChanel'
+    },{
+    	id: 23,
+    	icon: 'funnel',
+    	label: '栏目类型',
+    	component: 'ChanelType'
+    },{
+    	id: 24,
+    	icon: 'funnel',
+    	label: '模板管理',
+    	component: 'Template'
     }]
 },{
     id: 3,

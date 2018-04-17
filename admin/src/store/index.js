@@ -6,7 +6,10 @@ export default new Vuex.Store({
 	state: {
         user: {},
         isLogin: false,
-        routes: []
+        routes: [],
+        chanelTypeList: [],
+        chanelList: [],
+        templateList: []
 	},
 	mutations: {
 		updateUser (state,user) {
@@ -19,6 +22,15 @@ export default new Vuex.Store({
         },
         routeInit (state, payload) {
         	state.routes = payload;
+        },
+        setChanelType (state, payload) {
+        	state.chanelTypeList = payload;
+        },
+        setChanelList (state, payload) {
+        	state.chanelList = payload;
+        },
+        setTemplateList (state, payload) {
+        	state.templateList = payload;
         }
 	},
 	actions: {
@@ -37,6 +49,51 @@ export default new Vuex.Store({
                     throw new Error(e);
                 })                
             })
-        }
+        },
+        getChanelType ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/chanel/list_chanel_type').then(res=>{
+                    if(res.code === 200) {
+                        commit('setChanelType',res.data);
+                        resolve();
+                    }else{
+                        reject(res.msg);
+                    }
+                }).catch(e=>{
+                    reject(e.toString());
+                    throw new Error(e);
+                })                
+            })        	
+        },
+        getChanelList ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/chanel/list_chanel').then(res=>{
+                    if(res.code === 200) {
+                        commit('setChanelList',res.data);
+                        resolve();
+                    }else{
+                        reject(res.msg);
+                    }
+                }).catch(e=>{
+                    reject(e.toString());
+                    throw new Error(e);
+                })                
+            })           	
+        },
+        getTemplateList ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/template/list_template').then(res=>{
+                    if(res.code === 200) {
+                        commit('setTemplateList',res.data);
+                        resolve();
+                    }else{
+                        reject(res.msg);
+                    }
+                }).catch(e=>{
+                    reject(e.toString());
+                    throw new Error(e);
+                })                
+            })           	
+        }        
 	}
 })

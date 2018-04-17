@@ -1,4 +1,4 @@
-import { User, Role, UserInfo } from '../data'
+import { User, Role, UserInfo, UserOperation, Operation } from '../data'
 import md5 from 'md5'
 export default async function (req,res,next) {
     try{
@@ -89,11 +89,88 @@ export default async function (req,res,next) {
                     data: userList
                 })
             break;
-            case "update_user_operation": break;
-            case "del_use_operationr": break;
-            case "save_user_operation": break;
-            case "get_user_operation": break;
-            case "list_user_operation": break;        
+            case "update_user_operation": 
+                let uuoUser = await User.findById(req.body.uid);
+                let uuoOper = await Operation.findById(req.body.oid);
+                let uuoOperation = UserOperation.findById(req.body.id);
+                uuoOperation.setUser(uuoUser);
+                uuoOperation.setOperation(uuoOper);
+                res.json({
+                    code: 200,
+                    msg: '添加成功'
+                });
+            break;
+            case "del_use_operationr": 
+                await UserOperation.destroy({
+                    where: {
+                        id: req.body.id
+                    }
+                })
+                return res.json({
+                    code: 200,
+                    msg: '删除成功'
+                })
+            break;
+            case "save_user_operation": 
+                let suoUser = await User.findById(req.body.uid);
+                let suoOper = await Operation.findById(req.body.oid);
+                let suoOperation = UserOperation.build();
+                suoOperation.save();
+                suoOperation.setUser(suoUser);
+                suoOperation.setOperation(suoOper);
+                res.json({
+                    code: 200,
+                    msg: '添加成功'
+                });            
+            break;
+            case "get_user_operation": 
+                let guoParam = {};
+                if(req.body.uid){
+                    guoParam.uid = req.body.uid;
+                }
+                if(req.body.oid){
+                    guoParam.oid = req.body.oid;
+                }
+                let guod = await UserOperation.findAndCountAll({
+                    where: guoParam,
+                    include: [{
+                        model: User,
+                        as: 'user'
+                    },{
+                        model: Operation,
+                        as: 'operation'
+                    }]                     
+                })
+                res.json({
+                    code: 200,
+                    data: guod
+                })            
+            break;
+            case "list_user_operation": 
+                let lpage = req.body.page;
+                let loffset = parseInt(req.body.pageSize);
+                let llimit = lpage*loffset-loffset;            
+                let userOperList = await UserOperation.findAndCountAll({
+                    limit: loffset,
+                    offset: llimit,
+                    where: {
+                        uid: {
+                            $ne: 1
+                        }
+                    },				  
+                    include: [{
+                        model: User,
+                        as: 'user'
+                    },{
+                        model: Operation,
+                        as: 'operation'
+                    }]                  
+                });
+                res.json({
+                    code: 200,
+                    data: userOperList
+                })            
+            break;        
         }    
     }catch(e){
         res.json({

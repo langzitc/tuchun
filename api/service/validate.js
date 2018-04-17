@@ -35,7 +35,7 @@ const rules = {
     user_register: [{
         name: 'tel',
         required: true,
-        type: 'string'
+        type: /^1[3|4|5|8][0-9]\d{4,8}$/
     },{
         name: 'email',
         required: true,
@@ -71,7 +71,7 @@ const rules = {
     save_user: [{
         name: 'tel',
         required: true,
-        type: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/
+        type: /^1[3|4|5|8][0-9]\d{4,8}$/
     },{
         name: 'email',
         required: true,
@@ -88,7 +88,7 @@ const rules = {
     },{
         name: 'tel',
         required: false,
-        type: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/
+        type: /^1[3|4|5|8][0-9]\d{4,8}$/
     },{
         name: 'email',
         required: true,
@@ -105,14 +105,14 @@ export default function Validate (req,res,next) {
                 break;            
             }
             if(req.body[r.name]) {
-                if(r.type&&r.type === 'number' && (!Number.isInteger(parseInt(req.body[r.name])))) {
+                if(r.type&&r.type === 'number' && !Number.isInteger(parseInt(req.body[r.name]))) {
                     arr.push(errorResult.type(r.name,r.type));
                     break;
                 }
                 else if(r.type&&r.type.test&&!r.type.test(req.body[r.name])){
                     arr.push(errorResult.type(r.name,r.type));
                     break;                    
-                }else if(r.type&&(typeof req.body[r.name] === r.type)){
+                }else if(r.type&&r.type!=='number'&&!r.type.test&&!(typeof req.body[r.name] === r.type)){
                     arr.push(errorResult.type(r.name,r.type));
                     break;                      
                 }                  

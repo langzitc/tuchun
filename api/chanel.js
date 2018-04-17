@@ -2,6 +2,31 @@ import { Chanel, ChanelType } from '../data'
 export default async function (req,res,next) {
     try{
         switch (req.params.param) {
+            /**
+             * @api {post} /template/update_chanel 更新栏目
+             * @apiName update_chanel
+             * @apiGroup chanel
+             * @apiPermission admin
+             * @apiParam {Number} id 栏目id,必填
+             * @apiParam {Object} data 栏目更新内容,必填
+             * @apiVersion 1.0.0
+             * @apiSuccess {String} msg 消息.
+             * @apiSuccess {Number} code 状态码.
+             * @apiParamExample {json} Request-Example:
+             *     {
+             *       "id": 4711,
+             *       "data": {
+             *          template: '/default/index.ejs',
+             *          name: 'newName'
+             *       }
+             *     }             
+             * @apiSuccessExample {json} Success-Response:
+             *     HTTP/1.1 200 OK
+             *     {
+             *       "msg": "更新成功",
+             *       "code": 200
+             *     }
+             */             
             case "update_chanel": 
                 let uc = await Chanel.findById(req.body.id);
                 await uc.updateAttributes(req.body);
@@ -10,6 +35,26 @@ export default async function (req,res,next) {
                     msg: '保存栏目成功'
                 })             
             break;
+            /**
+             * @api {post} /template/update_chanel 删除栏目
+             * @apiName del_chanel
+             * @apiGroup chanel
+             * @apiPermission admin
+             * @apiParam {Number} id 栏目id,必填
+             * @apiVersion 1.0.0
+             * @apiSuccess {String} msg 消息.
+             * @apiSuccess {Number} code 状态码.
+             * @apiParamExample {json} Request-Example:
+             *     {
+             *       "id": 4711
+             *     }             
+             * @apiSuccessExample {json} Success-Response:
+             *     HTTP/1.1 200 OK
+             *     {
+             *       "msg": "删除成功",
+             *       "code": 200
+             *     }
+             */               
             case "del_chanel": 
                 await Chanel.destroy({
                     where: {
@@ -21,6 +66,30 @@ export default async function (req,res,next) {
                     msg: '删除栏目成功'
                 })                
             break;
+            /**
+             * @api {post} /template/save_chanel 更新栏目
+             * @apiName save_chanel
+             * @apiGroup chanel
+             * @apiPermission admin
+             * @apiParam {Object} data 栏目内容,必填
+             * @apiVersion 1.0.0
+             * @apiSuccess {String} msg 消息.
+             * @apiSuccess {Number} code 状态码.
+             * @apiParamExample {json} Request-Example:
+             *     {
+             *       "id": 4711,
+             *       "data": {
+             *          template: '/default/index.ejs',
+             *          name: 'newName'
+             *       }
+             *     }             
+             * @apiSuccessExample {json} Success-Response:
+             *     HTTP/1.1 200 OK
+             *     {
+             *       "msg": "添加成功",
+             *       "code": 200
+             *     }
+             */               
             case "save_chanel": 
                 let scp = JSON.parse(JSON.stringify(req.body));
                 let sctype = await ChanelType.findById(req.body.cid);
@@ -33,6 +102,27 @@ export default async function (req,res,next) {
                     msg: '添加栏目成功'
                 })
             break;
+            /**
+             * @api {post} /template/get_chanel 获取栏目
+             * @apiName get_chanel
+             * @apiGroup chanel
+             * @apiPermission admin
+             * @apiParam {Number} id 栏目id,必填
+             * @apiVersion 1.0.0
+             * @apiSuccess {String} msg 消息.
+             * @apiSuccess {Number} code 状态码.
+             * @apiParamExample {json} Request-Example:
+             *     {
+             *       "id": 4711
+             *     }             
+             * @apiSuccessExample {json} Success-Response:
+             *     HTTP/1.1 200 OK
+             *     {
+             *       "msg": "获取成功",
+             *       "code": 200,
+             *       "data": {...}
+             *     }
+             */             
             case "get_chanel": 
                 let gcd = await Chanel.findOne({
                     where: {
@@ -48,13 +138,24 @@ export default async function (req,res,next) {
                     data: gcd
                 })
             break;
-            case "list_chanel": 
-                let page = req.body.page;
-                let offset = parseInt(req.body.pageSize);
-                let limit = page*offset-offset;            
-                let chanelList = await Chanel.findAndCountAll({
-                    limit: offset,
-                    offset: limit,				  
+            /**
+             * @api {post} /template/list_chanel 栏目列表
+             * @apiName list_chanel
+             * @apiGroup chanel
+             * @apiPermission admin
+             * @apiVersion 1.0.0
+             * @apiSuccess {String} msg 消息.
+             * @apiSuccess {Number} code 状态码.           
+             * @apiSuccessExample {json} Success-Response:
+             *     HTTP/1.1 200 OK
+             *     {
+             *       "msg": "查询成功",
+             *       "code": 200,
+             *       "data": [...]
+             *     }
+             */             
+            case "list_chanel":            
+                let chanelList = await Chanel.findAll({				  
                     include: [{
                         model: ChanelType,
                         as: 'chanelType'
@@ -79,7 +180,7 @@ export default async function (req,res,next) {
                         id: req.body.id
                     }
                 })
-                return res.json({
+                res.json({
                     code: 200,
                     msg: '删除栏目类型成功'
                 })             
@@ -93,7 +194,7 @@ export default async function (req,res,next) {
                 })            
             break;
             case "list_chanel_type":             
-                let chaneltypeList = await Chanel.findAll();
+                let chaneltypeList = await ChanelType.findAll();
                 res.json({
                     code: 200,
                     data: chaneltypeList

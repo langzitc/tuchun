@@ -50,7 +50,7 @@ let init = async () => {
         throw new Error(e)
     }
 }
-Connect.sync({force: true}).then(function () {
+Connect.sync({force: false}).then(function () {
     console.log("----------------------");
     console.log("数据库同步成功");
     console.log("----------------------");
