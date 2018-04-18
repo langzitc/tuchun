@@ -83,6 +83,33 @@ export default new Router({
         	title: '文章列表'
         }
       },{
+        path: 'addarticle',
+        name: 'AddArticle',
+        component: function (resolve) {
+          require(['../components/AddArticle.vue'],resolve);
+        }, 
+        meta: {
+        	title: '文章管理'
+        }
+      },{
+        path: 'articletype',
+        name: 'ArticleType',
+        component: function (resolve) {
+          require(['../components/ArticleType.vue'],resolve);
+        }, 
+        meta: {
+        	title: '文章类型管理'
+        }
+      },{
+        path: 'classisic',
+        name: 'Classisic',
+        component: function (resolve) {
+          require(['../components/Classisic.vue'],resolve);
+        }, 
+        meta: {
+        	title: '分类管理'
+        }
+      },{
         path: 'storylist',
         name: 'StoryList',
         component: function (resolve) {

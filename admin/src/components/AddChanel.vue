@@ -13,30 +13,22 @@
 			        <FormItem label="栏目名称" prop="name">
 			            <Input size="large" v-model="formValidate.name" placeholder="栏目名称"></Input>
 			        </FormItem>
-			        <FormItem label="栏目类型" prop="tid">
-			            <Select size="large" v-model="formValidate.tid">
-			            	<Option v-for="(el,index) in chanelTypeList" :value="el.id">{{el.name}}</Option>
+			        <FormItem label="栏目类型" prop="cid">
+			            <Select size="large" v-model="formValidate.cid">
+			            	<Option v-for="(el,index) in chanelTypeList" :key="index" :value="el.id">{{el.name}}</Option>
 			            </Select>
 			        </FormItem>		
 			        <FormItem label="父级栏目">
-			            <Select size="large" v-model="formValidate.pid">
-			            	<Option value="index.ejs">index.ejs</Option>
-			            </Select>
+			            <Cascader :data="chanel" v-model="formValidate.pid"></Cascader>
 			        </FormItem>					        
-			        <FormItem label="栏目模板" prop="chanel_template">
-			            <Select size="large" v-model="formValidate.chanel_template">
-			            	<Option value="index.ejs">index.ejs</Option>
-			            </Select>
+			        <FormItem label="栏目模板">
+			            <Cascader :data="tempList" v-model="formValidate.chanel_template"></Cascader>
 			        </FormItem>
 			        <FormItem label="列表模板">
-			            <Select size="large" v-model="formValidate.list_template">
-			            	<Option value="index.ejs">index.ejs</Option>
-			            </Select>
+			            <Cascader :data="tempList" v-model="formValidate.list_template"></Cascader>
 			        </FormItem>		
 			        <FormItem label="文章模板">
-			            <Select size="large" v-model="formValidate.art_template">
-			            	<Option value="index.ejs">index.ejs</Option>
-			            </Select>
+			            <Cascader :data="tempList" v-model="formValidate.art_template"></Cascader>
 			        </FormItem>	
 			        <FormItem label="禁用栏目">
 						 <i-switch v-model="formValidate.flag"></i-switch>
@@ -79,37 +71,82 @@
 		name: 'AddChanel',
 		data () {
 			return {
-                formValidate: {
-                    name: '',
-                    chanel_template: '',
-                    list_template: '',
-                    art_template: '',
-                    flag: false,
-                    title: '',
-                    desc: '',
-                    keywords: '',
-                    img: '',
-                    pid: 0,
-                    tid: ''
-                },
-                ruleValidate: {
-                    name: [
-                        { required: true, message: '栏目名称不能为空', trigger: 'blur' }
-                    ],
-                    tid: [
-                        { required: true, message: '栏目类型不能为空', trigger: 'change' }
-                    ],                    
-                    chanel_template: [
-                        { required: true, message: '栏目模板不能为空', trigger: 'change' },
-                    ]
-                }				
+				url: '/chanel/save_chanel',
+        formValidate: {
+            name: '',
+            chanel_template: [],
+            list_template: [],
+            art_template: [],
+            flag: false,
+            title: '',
+            desc: '',
+            keywords: '',
+            img: '',
+            pid: [0],
+            cid: ''
+        },
+        ruleValidate: {
+            name: [
+                { required: true, message: '栏目名称不能为空', trigger: 'blur' }
+            ],
+            cid: [
+                { required: true,type: 'number', message: '栏目类型不能为空', trigger: 'change' }
+            ]                   
+        }				
 			}
 		},
-	    computed: {
-	    	...mapState({
-	    		chanelTypeList: state => state.chanelTypeList
-	    	})
-	    },		
+    computed: {
+    	chanel () {
+    		return [{
+    			value: 0,
+    			pid: 0,
+    			label: '根栏目',
+    			children: this.$store.state.chanelList
+    		}]
+    	},
+    	tempList () {
+    		let tl = this.$store.state.templateList;
+    		let f = (arr)=>{
+    			let a = [];
+    			arr.forEach(e=>{
+    				let obj = {};
+					  obj.label = e.name;
+					  obj.value = e.path;    				
+    				if(e.children&&e.children.length){
+    					obj.children = f(e.children);
+    				}
+    				a.push(obj);
+    			})
+    			return a;
+    		}
+    		return f(tl)
+    	},
+    	...mapState({
+    		chanelTypeList: state => state.chanelTypeList
+    	})
+    },	
+    mounted () {
+    	if(!this.chanelTypeList.length){
+    		this.$store.dispatch('getChanelType');
+    	}
+    	if(!this.$store.state.chanelList.length){
+    		this.$store.dispatch('getChanelList');
+    	}
+    	if(!this.$store.state.templateList.length){
+    		this.$store.dispatch('getTemplateList');
+    	}  
+    	let queryData = JSON.parse(JSON.stringify(this.$route.query));
+    	if(queryData.id){
+    		this.url = '/chanel/update_chanel';
+    	}
+    	queryData.flag = queryData.flag === 0  ? true : false;
+    	queryData.chanel_template = queryData.chanel_template ? [queryData.chanel_template] : [];
+    	queryData.list_template = queryData.list_template ? [queryData.list_template] : [];
+    	queryData.art_template = queryData.art_template ? [queryData.art_template] : [];
+    	queryData.cid = queryData.chanelType ? queryData.chanelType.id : 0;
+    	queryData.pid = [queryData.pid];
+    	Object.assign(this.formValidate,queryData);
+    },
 		methods: {
 			back () {
 				this.$router.go(-1);
@@ -121,15 +158,30 @@
 					this.$Message.error('文件上传失败');
 				}
 			},			
-            handleSubmit (name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
-                    }
-                })
-            }		
+	    handleSubmit (name) {
+	        this.$refs[name].validate((valid) => {
+	            if (valid) {
+	            		let d = JSON.parse(JSON.stringify(this.formValidate));
+	            		d.chanel_template = d.chanel_template.length ? d.chanel_template[d.chanel_template.length-1] : '';
+	            		d.list_template = d.list_template.length ? d.list_template[d.list_template.length-1] : '';
+	            		d.art_template = d.art_template.length ? d.art_template[d.art_template.length-1] : '';
+	            		d.pid = d.pid.length ? d.pid[d.pid.length-1] : '';
+	            		d.flag = d.flag ? 0 : 1;
+	                this.$http.post(this.url,d).then(res=>{
+	                	if(res.code === 200){
+	                		this.$Message.success(res.msg);
+	                		this.$router.push({
+	                			name: 'ChanelList'
+	                		})
+	                	}else{
+	                		this.$Message.error(res.msg);
+	                	}
+	                })
+	            } else {
+	                this.$Message.error('Fail!');
+	            }
+	        })
+	    }		
 		}
 	}
 </script>

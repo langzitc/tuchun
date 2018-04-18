@@ -2,7 +2,7 @@
 	<div class="tree-wrap">
 		<div class="tree-wrap-item" v-for="(el,index) in list" :key="index">
 			<div class="tree-wrap-item-inner">
-				<div class="tree-pre-ico" @click="test(el)">
+				<div class="tree-pre-ico" @click="expand(el)">
 					<Icon type="minus" v-if="el.expand"></Icon>
 					<Icon type="plus" v-else></Icon>
 				</div>
@@ -14,16 +14,16 @@
 						{{el.name}}
 					</Col>
 					<Col :span="4">
-						{{el.type}}
+						{{el.chanelType.name}}
 					</Col>
 					<Col :span="4">
-						{{el.flag}}
+						{{el.flag === 1 ? '可用' : '禁用'}}
 					</Col>
 					<Col :span="8" class="text-right">
 					    <ButtonGroup>
-					        <Button type="ghost" size="small" icon="plus-circled"></Button>
-					        <Button type="ghost" size="small" icon="close-circled"></Button>
-					        <Button type="ghost" size="small" icon="edit"></Button>
+					        <Button @click="add(el)" type="ghost" size="small" icon="plus-circled"></Button>
+					        <Button @click="del(el)" type="ghost" size="small" icon="close-circled"></Button>
+					        <Button @click="edit(el)" type="ghost" size="small" icon="edit"></Button>
 					    </ButtonGroup>					
 					</Col>
 				</Row>				
@@ -65,8 +65,40 @@
 				}
 				this.list = format(JSON.parse(JSON.stringify(this.data)));
 			},
-			test (el) {
+			expand (el) {
 				el.expand = !el.expand;
+			},
+			add (el) {
+				this.$router.push({
+					name: 'AddChanel',
+					query: {
+						pid: el.id
+					}
+				});
+			},
+			del (el) {
+				this.$Modal.confirm({
+					title: '系统提示',
+					content: '确认删除?',
+					onOk: ()=>{
+						this.$http.post('/chanel/del_chanel',{
+							id: el.id
+						}).then(res=>{
+							if(res.code === 200){
+								this.$Message.success(res.msg);
+								this.$store.dispatch('getChanelList');
+							}else{
+								this.$Message.error(res.msg);
+							}
+						});
+					}
+				});
+			},
+			edit (el) {
+				this.$router.push({
+					name: 'AddChanel',
+					query: el
+				});
 			}
 		},
 		watch: {

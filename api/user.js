@@ -1,4 +1,5 @@
 import { User, Role, UserInfo, UserOperation, Operation } from '../data'
+import { Connect } from "../until/index.js";
 import md5 from 'md5'
 export default async function (req,res,next) {
     try{
@@ -12,11 +13,14 @@ export default async function (req,res,next) {
                 })                
             break;
             case "del_user": 
-                await User.destroy({
-                    where: {
-                        id: req.body.id
-                    }
+                let f = await Connect.transaction(t=>{
+                    return  User.destroy({
+                        where: {
+                            id: req.body.id
+                        }
+                    })
                 })
+                console.log(f);
                 return res.json({
                     code: 200,
                     msg: '删除成功'

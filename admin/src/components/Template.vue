@@ -42,87 +42,111 @@
 		},
 		methods: {
 			loadData () {
-				this.$store.dispatch('getTemplateList');
+				this.$store.dispatch('getTemplateList').then(()=>{
+					this.data.sort((a,b)=>{
+						return b.isDirectory;
+					})
+				});
 			},
-            renderContent (h, { root, node, data }) {
-            	let btnArr = [];
-            	if(data.children&&data.children.length){
-					btnArr.push(
-                        h('Button', {
-                            props: Object.assign({}, this.buttonProps, {
-                                icon: 'ios-plus-empty'
-                            }),
-                            style: {
-                                marginRight: '8px'
-                            },
-                            on: {
-                                click: () => { this.append(data) }
-                            }
-                        })						
-					)
-					btnArr.push(
-                        h('Button', {
-                            props: Object.assign({}, this.buttonProps, {
-                                icon: 'ios-minus-empty'
-                            }),
-                            on: {
-                                click: () => { this.remove(root, node, data) }
-                            }
-                        })						
-					)
-            	}else{
-            		btnArr.push(
-                        h('Button', {
-                            props: Object.assign({}, this.buttonProps, {
-                                icon: 'edit'
-                            }),
-                            on: {
-                                click: () => { this.remove(root, node, data) }
-                            }
-                        })            			
-            		)
-            	}
-                return h('span', {
-                    style: {
-                        display: 'inline-block',
-                        width: '100%'
-                    }
-                }, [
-                    h('span', [
-                        h('Icon', {
-                            props: {
-                                type: data.children&&data.children.length ? 'folder' : 'document-text',
-                                size: 18
-                            },
-                            style: {
-                                marginRight: '8px'
-                            }
-                        }),
-                        h('span', data.name)
-                    ]),
-                    h('span', {
-                        style: {
-                            display: 'inline-block',
-                            float: 'right',
-                            marginRight: '15px'
-                        }
-                    }, btnArr)
-                ]);
-            },
-            append (data) {
-                const children = data.children || [];
-                children.push({
-                    title: 'appended node',
-                    expand: true
-                });
-                this.$set(data, 'children', children);
-            },
-            remove (root, node, data) {
-                const parentKey = root.find(el => el === node).parent;
-                const parent = root.find(el => el.nodeKey === parentKey).node;
-                const index = parent.children.indexOf(data);
-                parent.children.splice(index, 1);
-            }			
+	    renderContent (h, { root, node, data }) {
+	    	let btnArr = [];
+				btnArr.push(
+        h('Button', {
+            props: Object.assign({}, this.buttonProps, {
+                icon: 'ios-minus-empty'
+            }),
+            class: {
+            	treeBtn: true
+            },            
+		        style: {
+		            marginRight: '8px'
+		        },            
+            on: {
+                click: () => { this.remove(root, node, data) }
+            }
+        })						
+				)	    	
+	    	if(data.children&&data.children.length){
+						btnArr.push(
+	            h('Button', {
+	                props: Object.assign({}, this.buttonProps, {
+	                    icon: 'ios-plus-empty'
+	                }),
+	                class: {
+	                	treeBtn: true
+	                },
+	                on: {
+	                    click: () => { this.append(data) }
+	                }
+	            })						
+						)
+	    	}else{
+	    		btnArr.push(
+		        h('Button', {
+		            props: Object.assign({}, this.buttonProps, {
+		                icon: 'edit'
+		            }),
+                class: {
+                	treeBtn: true
+                },		            
+		            on: {
+		                click: () => { this.edit(root, node, data) }
+		            }
+		        })            			
+	    		)
+	    	}
+	        return h('span', {
+            style: {
+                display: 'inline-block',
+                width: '100%'
+            }
+	        }, [
+            h('span', [
+	            h('Icon', {
+	                props: {
+	                    type: data.children&&data.children.length ? 'folder' : 'document-text',
+	                    size: 18
+	                },
+	                style: {
+	                    marginRight: '8px'
+	                }
+	            }),
+	            h('span', data.name)
+            ]),
+            h('span', {
+	            style: {
+	                display: 'inline-block',
+	                float: 'right',
+	                marginRight: '15px'
+	            }
+            }, btnArr)
+	        ]);
+	    },
+	    append (data) {
+					this.addTemplate = true;
+	    },
+	    remove (root, node, data) {
+					this.$Modal.confirm({
+						title: '系统提示',
+						content: '确认删除?',
+						onOk: ()=>{
+							this.$http.post("/template/del_template",{
+								path: data.path
+							}).then(res=>{
+								if(res.code === 200){
+									this.$Message.success(res.msg);
+									this.loadData();
+								}else{
+									this.$Message.error(res.msg);
+								}
+							})
+						}
+					});
+	    },
+	    edit (root, node, data) {
+	    		this.selectTemplate = JSON.parse(JSON.stringify(data));
+					this.editTemplate = true;
+	    }	            
 		},
 		mounted () {
 			this.loadData();
@@ -130,5 +154,9 @@
 	}
 </script>
 
-<style>
+<style lang="less">
+	.treeBtn{
+		width: 25px;
+		height: 25px;
+	}
 </style>

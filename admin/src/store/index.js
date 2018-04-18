@@ -8,6 +8,7 @@ export default new Vuex.Store({
         isLogin: false,
         routes: [],
         chanelTypeList: [],
+        articleTypeList: [],
         chanelList: [],
         templateList: []
 	},
@@ -31,6 +32,9 @@ export default new Vuex.Store({
         },
         setTemplateList (state, payload) {
         	state.templateList = payload;
+        },
+        setArticleTypeList (state, payload) {
+        	state.articleTypeList = payload;
         }
 	},
 	actions: {
@@ -94,6 +98,21 @@ export default new Vuex.Store({
                     throw new Error(e);
                 })                
             })           	
-        }        
+        },
+        getArticleType ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/article/list_article_type').then(res=>{
+                    if(res.code === 200) {
+                        commit('setArticleTypeList',res.data);
+                        resolve();
+                    }else{
+                        reject(res.msg);
+                    }
+                }).catch(e=>{
+                    reject(e.toString());
+                    throw new Error(e);
+                })                
+            })          	
+        }
 	}
 })

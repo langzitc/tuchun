@@ -1,11 +1,8 @@
 <template>
   <Card>
       <Row slot="title">
-      	<Col :span="12" class="text-left">
+      	<Col :span="24" class="text-left">
       		栏目列表
-      	</Col>
-      	<Col :span="12" class="text-right">
-      		<Button type="error">批量删除</Button>
       	</Col>
       </Row>
       <div>

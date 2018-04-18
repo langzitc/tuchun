@@ -42,6 +42,16 @@ export default [{
         icon: 'ios-navigate',
         label: '文章列表',
         component: 'ArticleList'
+    },{
+        id: 32,
+        icon: 'ios-navigate',
+        label: '发布文章',
+        component: 'AddArticle'
+    },{
+        id: 33,
+        icon: 'ios-navigate',
+        label: '文章类型',
+        component: 'ArticleType'
     }]
 },{
     id: 4,
@@ -102,5 +112,15 @@ export default [{
         icon: 'ios-navigate',
         label: '列表',
         component: 'CollectList'
+    }]
+},{
+    id: 9,
+    label: '分类管理',
+    icon: 'ios-navigate',
+    children: [{
+        id: 91,
+        icon: 'ios-navigate',
+        label: '分类管理',
+        component: 'Classisic'
     }]
 }]

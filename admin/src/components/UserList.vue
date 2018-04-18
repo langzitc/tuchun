@@ -93,6 +93,7 @@ export default {
 		            								_this.$http.post("/user/del_user",{id:r.row.id}).then(res=>{
 		            									if(res.code === 200){
 		            										_this.$Message.success(res.msg);
+		            										_this.loadData();
 		            									}else{
 		            										_this.$Message.error(res.msg);
 		            									}

@@ -166,6 +166,34 @@ export default async function (req,res,next) {
                     data: chanelList
                 })
             break;
+            case "chanel_list_tree": 
+                let chanelListTree = await Chanel.findAll({				  
+                    attributes: ['id','name','pid']
+                });
+                let formatCLT = (arr,pid) => {
+                    let a = [];
+                    arr.forEach(e=>{
+                        if(e.pid === pid){
+                            let obj = {};
+                            obj.label = e.name;
+                            obj.value = e.id;
+                            obj.pid = e.pid;
+                            let cl = arr.filter(e2=>{
+                                return e2.pid === e.id;
+                            })
+                            if(cl.length){
+                                obj.children = formatCLT(arr,e.id);
+                            }
+                            a.push(obj);
+                        }
+                    })
+                    return a;
+                }
+                res.json({
+                    code: 200,
+                    data: formatCLT(chanelListTree,0)
+                })                
+            break;
             case "update_chanel_type": 
                 let uct = await ChanelType.findById(req.body.id);
                 await uct.updateAttributes(req.body);

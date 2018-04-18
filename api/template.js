@@ -102,8 +102,8 @@ export default function (req,res,next) {
                     dtCode = 404;
                 }
                 res.json({
-                    code: utCode,
-                    msg: utMsg
+                    code: dtCode,
+                    msg: dtMsg
                 });            
             break;
             /**
@@ -136,10 +136,10 @@ export default function (req,res,next) {
                     fs.writeFileSync(newTemplate,req.body.content);
                 }else{
                     createFolder(newTemplate);
-                    let writeStream = fs.createWriteStream();
+                    let writeStream = fs.createWriteStream(newTemplate);
                     let stBuf = Buffer.from(req.body.content,'utf-8');
                     writeStream.write(stBuf,'utf-8');
-                    writeStream.end;
+                    writeStream.end();
                 }
                 res.json({
                     code: 200,
@@ -175,7 +175,7 @@ export default function (req,res,next) {
                     res.json({
                         code: 200,
                         msg: '读取成功',
-                        data: gtcon.toString
+                        data: gtcon.toString()
                     });
                 }else{
                     res.json({
