@@ -10,7 +10,8 @@ export default new Vuex.Store({
         chanelTypeList: [],
         articleTypeList: [],
         chanelList: [],
-        templateList: []
+        templateList: [],
+        classicList: []
 	},
 	mutations: {
 		updateUser (state,user) {
@@ -35,6 +36,9 @@ export default new Vuex.Store({
         },
         setArticleTypeList (state, payload) {
         	state.articleTypeList = payload;
+        },
+        setClassicList (state, payload) {
+        	state.classicList = payload;
         }
 	},
 	actions: {
@@ -104,6 +108,21 @@ export default new Vuex.Store({
                 axios.post('/article/list_article_type').then(res=>{
                     if(res.code === 200) {
                         commit('setArticleTypeList',res.data);
+                        resolve();
+                    }else{
+                        reject(res.msg);
+                    }
+                }).catch(e=>{
+                    reject(e.toString());
+                    throw new Error(e);
+                })                
+            })          	
+        },
+        getClassicList ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/classic/list_classic').then(res=>{
+                    if(res.code === 200) {
+                        commit('setClassicList',res.data);
                         resolve();
                     }else{
                         reject(res.msg);

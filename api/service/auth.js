@@ -7,7 +7,6 @@ const exincludePath = [
     "user/test"
 ]
 export default function Auth (req,res,next) {
-    console.log(req.session.sid)
     if(!req.session.sid){
         req.session.sid = md5(req.ip+(new Date()).getTime());
     }

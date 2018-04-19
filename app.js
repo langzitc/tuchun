@@ -6,7 +6,10 @@ import router from './router/index.js'
 import bodyParser from 'body-parser'
 import { RedisClient } from './until/index.js'
 import session from 'express-session'
-import { SystemTask } from './task'
+import http from 'http'
+import socket from 'socket.io'
+import SocketInit from './api/socket'
+//import { SystemTask } from './task'
 import './data/index.js'
 Date.prototype.Format = function (fmt) { //author: meizz
 	var o = {
@@ -25,7 +28,9 @@ Date.prototype.Format = function (fmt) { //author: meizz
 }
 const RedisStore = require('connect-redis')(session);
 const app = express();
-app.use(session({
+const server = require('http').Server(app);
+const io = socket(server);
+const sessionMiddleWare = session({
 	secret: 'tuch',
 	name: 'tuch_session',
     cookie: {maxAge: 1800000},  //设置maxAge是1800000ms，即30分钟后session和相应的cookie失效过期
@@ -36,7 +41,11 @@ app.use(session({
 		client: RedisClient,
 		prefix: 'tuch_session'		
 	})
-}));
+});
+app.use(sessionMiddleWare);
+io.use((socket, next) => {
+	sessionMiddleWare(socket.request, socket.request.res, next);
+});
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/logger.log'), {flags: 'a'});
 app.use(morgan('short', {stream: accessLogStream}));
 app.use("/apidoc",express.static('apidoc'));
@@ -55,5 +64,6 @@ app.all('/api/:chanel/*', function(req, res, next) {
 	next();
 });
 app.use('/',router);
-app.listen(4000);
+SocketInit(io);
+server.listen(4000);
 //SystemTask();

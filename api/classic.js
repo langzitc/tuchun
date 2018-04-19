@@ -33,14 +33,33 @@ export default async function (req,res,next) {
                 })            
             break;
             case "list_classic":           
-                let classicList = await Classification.findAndCountAll({
+                let classicList = await Classification.findAll({
                     where: {
                         pid: req.body.pid||0
                     } 
                 });
+                let clf = (arr,pid) => {
+                    let a = [];
+                    arr.forEach(e=>{
+                        if(e.pid === pid){
+                            let obj = {};
+                            obj.label = e.name;
+                            obj.value = e.id;
+                            obj.pid = e.pid;
+                            let cl = arr.filter(e2=>{
+                                return e2.pid === e.id;
+                            })
+                            if(cl.length){
+                                obj.children = clf(arr,e.id);
+                            }
+                            a.push(obj);
+                        }
+                    })
+                    return a;
+                }
                 res.json({
                     code: 200,
-                    data: classicList
+                    data: clf(classicList,0)
                 })            
             break;
         }          
