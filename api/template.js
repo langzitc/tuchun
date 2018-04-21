@@ -1,26 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-function walk(dir,basePath = '') {  
-    let children = []  
-    fs.readdirSync(dir).forEach(function(filename){  
-        let paths = path.resolve(dir,filename);  
-        let stat = fs.statSync(paths);  
-        if (stat && stat.isDirectory()) {  
-             children.push({
-                 name: filename,
-                 isDirectory: true,
-                 children: walk(paths,"/"+filename)
-             });
-        }  
-        else if (filename.includes('.ejs')){  
-            let obj = {};
-            obj.name = filename;
-            obj.path = basePath ? basePath+"/"+filename : filename;
-            children.push(obj);
-        }  
-    })  
-    return children  
-}  
+import { walk } from '../until'
 function createFolder (to) {
     let sep = path.sep;
     let folders = path.dirname(to).split(sep);

@@ -127,6 +127,24 @@ export default new Router({
         meta: {
         	title: '评论列表'
         }
+      },{
+        path: 'collecttask',
+        name: 'CollectTask',
+        component: function (resolve) {
+          require(['../components/CollectTask.vue'],resolve);
+        }, 
+        meta: {
+        	title: '任务列表'
+        }
+      },{
+        path: 'collectdata',
+        name: 'CollectData',
+        component: function (resolve) {
+          require(['../components/CollectTask.vue'],resolve);
+        }, 
+        meta: {
+        	title: '数据导入'
+        }
       }]
     }        
   ]

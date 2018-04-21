@@ -47,12 +47,12 @@
 	            					},
 	            					on: {
 	            						'click' () {
-											_this.$router.push({
-												name: 'AddChanel',
-												query: {
-													id: r.row.id
-												}
-											})
+															_this.$router.push({
+																name: 'AddArticle',
+																query: {
+																	id: r.row.id
+																}
+															})
 	            						}
 	            					}
 	            				},'编辑'),
@@ -63,22 +63,22 @@
 	            					},
 	            					on: {
 	            						'click' () {
-											_this.$Modal.confirm({
-												title: '提示',
-												content: '确认删除?',
-												onOk: ()=>{
-		            								_this.$http.post("/article/del_article",{id:r.row.id}).then(res=>{
-		            									if(res.code === 200){
-		            										_this.$Message.success(res.msg);
-		            										_this.loadData();
-		            									}else{
-		            										_this.$Message.error(res.msg);
-		            									}
-		            								}).catch(e=>{
-		            									_this.$Message.error('删除失败');
-		            								})
-												}
-											})
+															_this.$Modal.confirm({
+																title: '提示',
+																content: '确认删除?',
+																onOk: ()=>{
+						            								_this.$http.post("/article/del_article",{id:r.row.id}).then(res=>{
+						            									if(res.code === 200){
+						            										_this.$Message.success(res.msg);
+						            										_this.loadData();
+						            									}else{
+						            										_this.$Message.error(res.msg);
+						            									}
+						            								}).catch(e=>{
+						            									_this.$Message.error('删除失败');
+						            								})
+																}
+															})
 	            						}
 	            					}
 	            				},'删除')            				

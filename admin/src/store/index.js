@@ -10,6 +10,7 @@ export default new Vuex.Store({
         chanelTypeList: [],
         articleTypeList: [],
         chanelList: [],
+        chanelTreeList: [],
         templateList: [],
         classicList: []
 	},
@@ -31,6 +32,9 @@ export default new Vuex.Store({
         setChanelList (state, payload) {
         	state.chanelList = payload;
         },
+        setChanelTreeList (state, payload) {
+        	state.chanelTreeList = payload;
+        },        
         setTemplateList (state, payload) {
         	state.templateList = payload;
         },
@@ -88,6 +92,21 @@ export default new Vuex.Store({
                 })                
             })           	
         },
+        getChanelTreeList ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/chanel/chanel_list_tree').then(res=>{
+                    if(res.code === 200) {
+                        commit('setChanelTreeList',res.data);
+                        resolve();
+                    }else{
+                        reject(res.msg);
+                    }
+                }).catch(e=>{
+                    reject(e.toString());
+                    throw new Error(e);
+                })                
+            })           	
+        },        
         getTemplateList ({commit}) {
             return new Promise((resolve,reject)=>{
                 axios.post('/template/list_template').then(res=>{

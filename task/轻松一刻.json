@@ -1,0 +1,22 @@
+{
+    "taskName": "轻松一刻",
+    "uri": ["http://www.52rkl.cn/jiongge/"],
+    "listRule": ".excerpts .excerpt",
+    "listTitle": "h2 a b",
+    "listTime": "time",
+    "listDesc": ".note a",
+    "listUri": ".note a",
+    "listImg": ".focus img",
+    "content": ".article-content",
+    "isAuto": false,
+    "month": 0,
+    "year": 0,
+    "day": 0,
+    "week": 0,
+    "hour": 0,
+    "minute": 0,
+    "second": 0,
+    "saveChanelId": 0,
+    "chanelName": "采集",
+    "isAutoImport": false
+}

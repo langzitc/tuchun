@@ -9,7 +9,7 @@ import session from 'express-session'
 import http from 'http'
 import socket from 'socket.io'
 import SocketInit from './api/socket'
-//import { SystemTask } from './task'
+import { SystemTask } from './task'
 import './data/index.js'
 Date.prototype.Format = function (fmt) { //author: meizz
 	var o = {
@@ -49,6 +49,7 @@ io.use((socket, next) => {
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/logger.log'), {flags: 'a'});
 app.use(morgan('short', {stream: accessLogStream}));
 app.use("/apidoc",express.static('apidoc'));
+app.use("/static",express.static('static'));
 app.use("/upload",express.static(path.join("./", 'upload')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -66,4 +67,4 @@ app.all('/api/:chanel/*', function(req, res, next) {
 app.use('/',router);
 SocketInit(io);
 server.listen(4000);
-//SystemTask();
+SystemTask();

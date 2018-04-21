@@ -54,6 +54,6 @@ Connect.sync({force: false}).then(function () {
     console.log("----------------------");
     console.log("数据库同步成功");
     console.log("----------------------");
-    init();    
+    //init();    
 });
 export { User, Role, Article, ArticleType, Chanel, ChanelType, Classification, Operation, RoleOperation, Talk, UserInfo, UserOperation, Web }

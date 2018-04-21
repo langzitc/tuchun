@@ -14,7 +14,7 @@
 						{{el.name}}
 					</Col>
 					<Col :span="4">
-						{{el.chanelType.name}}
+						{{el.chanelType ? el.chanelType.name : ''}}
 					</Col>
 					<Col :span="4">
 						{{el.flag === 1 ? '可用' : '禁用'}}

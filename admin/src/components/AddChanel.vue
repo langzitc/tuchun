@@ -101,7 +101,7 @@
     			value: 0,
     			pid: 0,
     			label: '根栏目',
-    			children: this.$store.state.chanelList
+    			children: this.$store.state.chanelTreeList
     		}]
     	},
     	tempList () {
@@ -129,8 +129,8 @@
     	if(!this.chanelTypeList.length){
     		this.$store.dispatch('getChanelType');
     	}
-    	if(!this.$store.state.chanelList.length){
-    		this.$store.dispatch('getChanelList');
+    	if(!this.$store.state.chanelTreeList.length){
+    		this.$store.dispatch('getChanelTreeList');
     	}
     	if(!this.$store.state.templateList.length){
     		this.$store.dispatch('getTemplateList');

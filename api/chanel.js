@@ -28,8 +28,14 @@ export default async function (req,res,next) {
              *     }
              */             
             case "update_chanel": 
+                let ucda = JSON.parse(JSON.stringify(req.body));
                 let uc = await Chanel.findById(req.body.id);
-                await uc.updateAttributes(req.body);
+                let ucType = await ChanelType.findById(req.body.cid);
+                delete ucda.id;
+                delete ucda.cid;
+                delete ucda.typeid;
+                await uc.updateAttributes(ucda);
+                uc.setChanelType(ucType);
                 res.json({
                     code: 200,
                     msg: '保存栏目成功'
@@ -161,10 +167,26 @@ export default async function (req,res,next) {
                         as: 'chanelType'
                     }]                    
                 });
+                let formatCLL = (arr,pid) => {
+                    let a = [];
+                    arr.forEach(e=>{
+                        if(e.pid === pid){
+                            let obj = JSON.parse(JSON.stringify(e));
+                            let cl = arr.filter(e2=>{
+                                return e2.pid === e.id;
+                            })
+                            if(cl.length){
+                                obj.children = formatCLL(arr,e.id);
+                            }
+                            a.push(obj);
+                        }
+                    })
+                    return a;
+                }
                 res.json({
                     code: 200,
-                    data: chanelList
-                })
+                    data: formatCLL(chanelList,0)
+                })                  
             break;
             case "chanel_list_tree": 
                 let chanelListTree = await Chanel.findAll({				  

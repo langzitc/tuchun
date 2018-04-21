@@ -3,7 +3,6 @@ import config from "../config/db.js";
 import redis from 'redis';
 import fs from 'fs';
 import path from 'path'
-import xml2js from 'xml2js'
 Promise.prototype.finally = function (callback) {
 	let P = this.constructor;
 	return this.then(
@@ -20,17 +19,13 @@ const RedisClient = redis.createClient(config.rds_port,config.rds_host,config.rd
 RedisClient.auth(config.rds_pwd,()=>{
   console.log('redis 通过认证');
 })
-function GetXml (paths) {
+function GetJSONFile (paths) {
+  if(!fs.existsSync(paths)){
+    createFolder(paths);
+    fs.writeFileSync(paths, "[]");
+  }
   let r = fs.readFileSync(paths).toString();
-  let parseString = xml2js.parseString;
-  return new Promise((resolve,reject)=>{
-    parseString (r,{explicitArray: false},(err,result)=>{
-      if(err){
-        return reject(err);
-      }
-      resolve(result);
-    })
-  });
+  return JSON.parse(r);
 }
 function createFolder (to) {
   let sep = path.sep;
@@ -43,27 +38,31 @@ function createFolder (to) {
       }
   }    
 }
-async function SaveXml (paths, data){
-  let jsonxml = {};
-  let builder = new xml2js.Builder();
-  if(fs.existsSync(paths)){
-    let d = await GetXml(paths);
-    data.forEach(e=>{
-        let f = d.root.item.filter(e2=>{
-          return e2.href === e.href;
-        }).length === 0;
-        if(f){
-          d.root.item.push(e);
-        }
-    })
-    jsonxml = builder.buildObject(d);
-    fs.writeFileSync(paths,jsonxml);    
-  }else{
-    createFolder(paths);
-    jsonxml = builder.buildObject({
-      root: data
-    });
-    fs.appendFileSync(paths,jsonxml);    
-  }  
+function walk(dir,basePath = '') {  
+  let children = []  
+  fs.readdirSync(dir).forEach(function(filename){  
+      let paths = path.resolve(dir,filename);  
+      let stat = fs.statSync(paths);  
+      if (stat && stat.isDirectory()) {  
+           children.push({
+               name: filename,
+               isDirectory: true,
+               children: walk(paths,"/"+filename)
+           });
+      }  
+      else if (filename.includes('.ejs')){  
+          let obj = {};
+          obj.name = filename;
+          obj.path = basePath ? basePath+"/"+filename : filename;
+          children.push(obj);
+      }  
+  })  
+  return children  
+}  
+function SaveFile (paths, data){
+    if(!fs.existsSync(paths)){
+        createFolder(paths);
+    }   
+    fs.writeFileSync(paths, data); 
 }
-export { Connect, RedisClient, GetXml, SaveXml, createFolder };
+export { Connect, RedisClient, GetJSONFile, SaveFile, createFolder, walk };

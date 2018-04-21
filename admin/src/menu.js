@@ -105,13 +105,13 @@ export default [{
     children: [{
         id: 81,
         icon: 'ios-navigate',
-        label: '规则',
-        component: 'CollectRule'
+        label: '任务',
+        component: 'CollectTask'
     },{
         id: 82,
         icon: 'ios-navigate',
-        label: '列表',
-        component: 'CollectList'
+        label: '数据导入',
+        component: 'CollectData'
     }]
 },{
     id: 9,
