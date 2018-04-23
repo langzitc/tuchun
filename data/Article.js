@@ -38,6 +38,10 @@ const Article = Connect.define('article', {
   },
   content: {
     type: Sequelize.TEXT
+  },
+  hit: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   }
 }, 
 {

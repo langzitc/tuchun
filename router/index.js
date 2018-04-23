@@ -12,6 +12,7 @@ import Talk from '../api/talk';
 import multer from 'multer';
 import fs from 'fs';
 import path from "path";
+import Page from './page'
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         let paths = path.join(__dirname,"../upload",(new Date()).Format("yyyy-MM-dd"));
@@ -33,40 +34,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 const router = express.Router();
 router.get("/",(req,res)=>{
-    res.render('index.ejs', {
-        title: '首页-阿正个人网站',
-        desc: 'tuchun website',
-        keywords: '阿正'
-    });    
+    res.redirect('/home')   
 })
-router.get("/article_list",(req,res)=>{
-    res.render('article_list.ejs', {
-        title: 'tuchun',
-        desc: 'tuchun website',
-        keywords: 'tuchun web'
-    });    
-})
-router.get("/article_info",(req,res)=>{
-    res.render('article.ejs', {
-        title: '文章-阿正个人网站',
-        desc: 'tuchun website',
-        keywords: 'tuchun web'
-    });    
-})
-router.get("/article_detail",(req,res)=>{
-    res.render('article_detail.ejs', {
-        title: 'tuchun',
-        desc: 'tuchun website',
-        keywords: 'tuchun web'
-    });    
-})
-router.get("/comment",(req,res)=>{
-    res.render('comment.ejs', {
-        title: 'tuchun',
-        desc: 'tuchun website',
-        keywords: 'tuchun web'
-    });    
-})
+router.get("/:page",Page);
 router.use("/api/*",Auth);
 router.use("/api/upload/fileupload",upload.single('file'),(req,res,next)=>{
     let a = req.file.path;
