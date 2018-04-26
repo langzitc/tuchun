@@ -10,12 +10,15 @@
 .layout-logo{
     width: 100px;
     height: 30px;
-    background: #5b6270;
+    background: transparent;
     border-radius: 3px;
     float: left;
     position: relative;
     top: 15px;
     left: 20px;
+    img{
+    	height: 30px;
+    }
 }
 .layout-nav{
     width: 420px;
@@ -34,11 +37,13 @@
         <Layout>
             <Header>
                 <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo"></div>
+                    <div class="layout-logo">
+                    	<img src="../assets/logo2.png" alt="" />
+                    </div>
                     <div class="layout-nav">
                         <MenuItem name="1">
                             <Icon type="home"></Icon>
-                            首页
+                            <a href="/">首页</a>
                         </MenuItem>
                         <MenuItem name="2">
                             <Icon type="settings"></Icon>

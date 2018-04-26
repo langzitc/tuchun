@@ -38,6 +38,7 @@
 	                }
 	            },{
 	            		title: '操作',
+	            		align: 'right',
 	            		render (h,r){
 	            			return h('span',[
 	            				h('Button',{
@@ -81,7 +82,19 @@
 															})
 	            						}
 	            					}
-	            				},'删除')            				
+	            				},'删除'),
+	            				h('Button',{
+													props: {
+			            					type: 'success',
+			            					size: 'small',
+			            					icon: 'eye'
+													},
+													on: {
+														click () {
+															window.open("http://localhost:4000/article_detail?aid="+r.row.id+"&cid="+r.row.typeid);
+														}
+													}
+	            				})
 	            			])
 	            		}
 	            }],

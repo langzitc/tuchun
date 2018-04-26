@@ -10,6 +10,8 @@ import Classic from '../api/classic';
 import Crawler from '../api/crawler';
 import Talk from '../api/talk';
 import multer from 'multer';
+import qn from 'qn';
+import config from '../config/db'
 import fs from 'fs';
 import path from "path";
 import Page from './page'
@@ -32,9 +34,15 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage });
+const qnupload = multer({
+    storage: multer.memoryStorage()
+})
 const router = express.Router();
 router.get("/",(req,res)=>{
     res.redirect('/home')   
+})
+router.get("/admin",(req,res,next)=>{
+    res.redirect("/admin/dist/index.html");
 })
 router.get("/:page",Page);
 router.use("/api/*",Auth);
@@ -47,6 +55,41 @@ router.use("/api/upload/fileupload",upload.single('file'),(req,res,next)=>{
         msg: "上传成功",
         path: `http://localhost:4000/upload/${d}`
     });    
+})
+// 上传到七牛 
+router.use("/api/upload/qnupload",(req,res,next)=>{
+    let client = qn.create(config.qn_config);
+    qnupload.single('file')(req,res,(err)=>{
+        console.log(req.file);
+        if(err){
+            res.json({
+                code: 503,
+                msg: err.toString()
+            });
+            console.log(err,1);
+        }
+        if(req.file&&req.file.buffer){
+            let fileFormat = (req.file.originalname).split("."); 
+            let filePath = '/upload/' + req.file.fieldname + '-' +Date.now() + '.' +fileFormat[fileFormat.length - 1];
+            client.upload(req.file.buffer, {
+                key: filePath
+            }, function(err, result) {
+                if (err) {
+                    res.json({
+                        code: 503,
+                        msg: err.toString()
+                    });
+                    console.log(err,2)
+                }
+                res.json({
+                    code: 200,
+                    msg: '上传成功',
+                    path: config.static_server_url+filePath
+                });                
+                console.log(result,3)
+            });            
+        }
+    })
 })
 router.use("/api/:route/:param",Validate);
 router.use("/api/public/:param",Public);
