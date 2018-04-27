@@ -91,7 +91,7 @@
 													},
 													on: {
 														click () {
-															window.open("http://localhost:4000/article_detail?aid="+r.row.id+"&cid="+r.row.typeid);
+															window.open("/article_detail?aid="+r.row.id+"&cid="+r.row.typeid);
 														}
 													}
 	            				})

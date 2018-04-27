@@ -47,7 +47,7 @@
 					        type="drag"
 					        :with-credentials="true"
 					        :on-success="uploadSuccess"
-					        action="http://localhost:4000/api/upload/qnupload">
+					        action="/api/upload/qnupload">
 					        <div v-if="formValidate.img" class="text-center upload-show-img">
 					        	<img :src="formValidate.img" alt="" width="100px" height="100px"/>
 					        </div>

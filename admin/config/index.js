@@ -44,7 +44,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: 'http://personal.54tuchun.com',
+    assetsPublicPath: 'http://personal.54tuchun.com/admin/dist/',
 
     /**
      * Source Maps
