@@ -1,4 +1,5 @@
 import md5 from 'md5'
+import svgCaptcha from 'svg-captcha'
 import { RedisClient } from '../until/index.js'
 import { User, Web, Role, RoleOperation, Operation } from '../data/index.js'
 import axios from 'axios'
@@ -11,8 +12,21 @@ export default async function (req,res,next) {
                     msg: req.session.sid,
                     user: req.session.user
                 })
-            break;       
-            case "user_login": 
+            break;    
+            case "get_capatcha": 
+                let codeConfig = {
+                    size: 6,// 验证码长度
+                    ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+                    noise: 2, // 干扰线条的数量
+                    height: 40 
+                }
+                let captchas = svgCaptcha.create(codeConfig);
+                req.session.captcha_code = captchas.text.toLowerCase();
+                res.send({
+                    img: captchas.data
+                })
+            break;   
+            case "user_login":           
                 let user = await User.login(req.body.username,md5(req.body.password));
                 req.session.user = user.dataValues;
                 if(user.dataValues){
@@ -21,10 +35,21 @@ export default async function (req,res,next) {
                         msg: '登录成功',
                         data: user.dataValues
                     })
+                    req.session.login_count = 0;
                     return;                
+                }
+                let captcha = false;
+                if(req.session.login_count){
+                    req.session.login_count = parseInt(req.session.login_count)+1;
+                    if(parseInt(req.session.login_count)>3){
+                        captcha = true;
+                    }
+                }else{
+                    req.session.login_count = 1;
                 }
                 res.json({
                     code: 503,
+                    captcha,
                     msg: '登录失败',
                     data: {}
                 })            
