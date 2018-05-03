@@ -12,6 +12,11 @@ import Talk from './Talk.js'
 import UserInfo from './UserInfo.js'
 import UserOperation from './UserOperation.js'
 import Web from './Web.js'
+import Shuoshuo from './Shuoshuo.js'
+import ShuoshuoZan from './ShuoshuoZan.js'
+import ShuoshuoTalk from './ShuoshuoTalk.js'
+import Picture from './Picture.js'
+import PictureGroup from './PictureGroup.js'
 User.belongsTo(Role,{foreignKey: "roleid"});
 User.belongsTo(UserInfo,{foreignKey: "infoid"});
 Chanel.belongsTo(ChanelType,{foreignKey: 'typeid'});
@@ -21,8 +26,16 @@ RoleOperation.belongsTo(Role,{foreignKey: 'rid'});
 RoleOperation.belongsTo(Operation,{foreignKey: 'oid'});
 Talk.belongsTo(Article,{foreignKey: 'aid'});
 Talk.belongsTo(User,{foreignKey: 'uid'});
+Shuoshuo.belongsTo(User,{foreignKey: 'uid'});
+ShuoshuoTalk.belongsTo(Shuoshuo,{foreignKey: 'sid'});
+ShuoshuoTalk.belongsTo(User,{foreignKey: 'uid'});
+ShuoshuoTalk.belongsTo(User,{foreignKey: 'touid'});
+ShuoshuoZan.belongsTo(User,{foreignKey: 'uid'});
+ShuoshuoZan.belongsTo(Shuoshuo,{foreignKey: 'sid'});
 UserOperation.belongsTo(User,{foreignKey: 'uid'});
 UserOperation.belongsTo(Operation,{foreignKey: 'oid'});
+Picture.belongsTo(PictureGroup,{foreignKey: 'gid'});
+PictureGroup.belongsTo(User,{foreignKey: 'uid'});
 let init = async () => {
     try {
         let role = Role.build({
@@ -50,17 +63,29 @@ let init = async () => {
         throw new Error(e)
     }
 }
-Connect.sync({force: true}).then(function () {
+Connect.sync({force: false}).then(function () {
     console.log("----------------------");
     console.log("数据库同步成功");
     console.log("----------------------");
-    init();
-    // setTimeout(async ()=>{
-    //     let user = await User.findById(1);
-    //     user.update({
-    //         weixin: '18782913591'
-    //     })
-    //     console.log("gengxin");
-    // },5000)     
+    //init();    
 });
-export { User, Role, Article, ArticleType, Chanel, ChanelType, Classification, Operation, RoleOperation, Talk, UserInfo, UserOperation, Web }
+export { 
+    User, 
+    Role, 
+    Article, 
+    ArticleType, 
+    Chanel, 
+    ChanelType, 
+    Classification, 
+    Operation, 
+    RoleOperation, 
+    Talk, 
+    UserInfo, 
+    UserOperation, 
+    Web,
+    Shuoshuo,
+    ShuoshuoTalk,
+    ShuoshuoZan,
+    Picture,
+    PictureGroup 
+}

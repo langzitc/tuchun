@@ -17,6 +17,21 @@ export default [{
         icon: 'ios-navigate',
         label: '栏目列表',
         component: 'ChanelList'
+    },{
+    	id: 22,
+    	icon: 'plus',
+    	label: '添加栏目',
+    	component: 'AddChanel'
+    },{
+    	id: 23,
+    	icon: 'funnel',
+    	label: '栏目类型',
+    	component: 'ChanelType'
+    },{
+    	id: 24,
+    	icon: 'funnel',
+    	label: '模板管理',
+    	component: 'Template'
     }]
 },{
     id: 3,
@@ -27,6 +42,16 @@ export default [{
         icon: 'ios-navigate',
         label: '文章列表',
         component: 'ArticleList'
+    },{
+        id: 32,
+        icon: 'ios-navigate',
+        label: '发布文章',
+        component: 'AddArticle'
+    },{
+        id: 33,
+        icon: 'ios-navigate',
+        label: '文章类型',
+        component: 'ArticleType'
     }]
 },{
     id: 4,
@@ -80,12 +105,22 @@ export default [{
     children: [{
         id: 81,
         icon: 'ios-navigate',
-        label: '规则',
-        component: 'CollectRule'
+        label: '任务',
+        component: 'CollectTask'
     },{
         id: 82,
         icon: 'ios-navigate',
-        label: '列表',
-        component: 'CollectList'
+        label: '数据导入',
+        component: 'CollectData'
+    }]
+},{
+    id: 9,
+    label: '分类管理',
+    icon: 'ios-navigate',
+    children: [{
+        id: 91,
+        icon: 'ios-navigate',
+        label: '分类管理',
+        component: 'Classisic'
     }]
 }]

@@ -3,7 +3,8 @@ const exincludePath = [
     "public/admin_login",
     "public/user_login",
     "public/user_register",
-    "public/test"
+    "public/search_song",
+    "user/test"
 ]
 export default function Auth (req,res,next) {
     if(!req.session.sid){

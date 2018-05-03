@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "supervisor index.js",
-    "api": "apidoc -i api/ -o apidoc/doc/"
+    "api": "apidoc -i api/ -o apidoc/doc/",
+    "api:dev": "node apidoc-watch.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/langzitc/tuchun#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.18.2",
     "connect-redis": "^3.3.3",
@@ -32,25 +34,30 @@
     "express-session": "^1.15.6",
     "md5": "^2.2.1",
     "morgan": "^1.9.0",
+    "multer": "^1.3.0",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.3",
+    "node-schedule": "^1.3.0",
+    "qn": "^1.3.0",
     "redis": "^2.8.0",
     "sequelize": "^4.37.6",
     "socket.io": "^2.1.0",
-    "socket.io-client": "^2.1.0"
+    "socket.io-client": "^2.1.0",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
-    "babel-register": "^6.26.0"
+    "babel-register": "^6.26.0",
+    "gaze": "^1.1.2"
   },
   "apidoc": {
-    "name": "屠春个人网站API",
+    "name": "Admin API",
     "version": "1.0.0",
     "description": "API文档",
-    "title": "屠春个人网站API文档",
+    "title": "Admin API 文档",
     "url": "http://api.54tuchun.com/api"
   }
 }

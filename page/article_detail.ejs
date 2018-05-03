@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="keywords" content="<%=keywords%>">
+    <meta name="description" content="<%=desc%>">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/moodList.css"/>
+    <link rel="stylesheet" href="/static/plugin/jquery.page.css">    
+	<link href="/static/favicon.ico" rel="shortcut icon" />    
+    <title><%=title%></title>
+</head>
+<body>
+    <% include header.ejs %>
+	<div class="w_container">
+		<div class="container">
+			<div class="row w_main_row">
+				
+				<ol class="breadcrumb w_breadcrumb">
+				  <li><a href="/">首页</a></li>
+				  <% if(chanel.length){%>
+					<% chanel.forEach((e,index)=>{ %>
+						<li><a href="/article_info?cid=e.id"><%=e.name%></a></li>
+					<% }) %>
+				  <% } %>
+				  <li class="active"><%=detail.title%></li>
+				  <span class="w_navbar_tip">我们长路漫漫，只因学无止境。</span>
+				</ol>
+				
+				<div class="col-lg-9 col-md-9 w_main_left">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<h2 class="c_titile"><%=detail.title%></h2>
+							<p class="box_c"><span class="d_time">发布时间：<%=detail.create_at.Format('yyyy-MM-dd hh:mm:ss')%></span><span>作者：<a href="mailto:919777596@qq.com"><%=detail.author%></a></span><span>阅读（<%=detail.hit%>）</span></p>
+							<ul class="infos">
+								<%-detail.content%>
+							</ul>
+															
+							<div class="keybq">
+								<p>
+									<span>关键字</span>：
+									<% if(detail.keywords){ %>
+										<% detail.keywords.split(',').forEach(function(k){ %>
+											<a class="label label-default"><%=k%></a>
+										<% }) %>										
+									<% } %>
+								</p>    
+						    </div>
+							
+							
+							
+							<!-- <div class="nextinfo">
+								<p class="last">上一篇：<a href="#">免费收录网站搜索引擎登录口大全</a></p>
+								<p class="next">下一篇：<a href="#">javascript显示年月日时间代码</a></p>
+						    </div> -->
+							
+						</div>
+					</div>
+					
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<center><div id="cyReward" role="cylabs" data-use="reward" sid="5eab7e4c363e4cb8bed0efa3604e6b42"></div></center>
+							<!--<div id="cyEmoji" role="cylabs" data-use="emoji" sid="5eab7e4c363e4cb8bed0efa3604e6b42"></div>-->
+							<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+							<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cysPwLFm1"></script>
+							
+							
+							<!--PC版-->
+							<!--<div id="SOHUCS" sid="5eab7e4c363e4cb8bed0efa3604e6b42"></div>
+							<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>							
+							<script type="text/javascript">
+							window.changyan.api.config({
+							appid: 'cysPwLFm1',
+							conf: 'prod_6c6350e206c502f569b865b4bf121e60'
+							});
+							</script>-->
+							<!-- 多说评论框 start -->
+								<div class="ds-thread" data-thread-key="testarticle" data-title="我的个人博客之——阿里云空间选择" data-url="http://127.0.0.1:8020/wilco/article_detail.html"></div>
+							<!-- 多说评论框 end -->
+							<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+							<script type="text/javascript">
+							var duoshuoQuery = {short_name:"wfyvv"};
+								(function() {
+									var ds = document.createElement('script');
+									ds.type = 'text/javascript';ds.async = true;
+									ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+									ds.charset = 'UTF-8';
+									(document.getElementsByTagName('head')[0] 
+									 || document.getElementsByTagName('body')[0]).appendChild(ds);
+								})();
+								</script>
+							<!-- 多说公共JS代码 end -->
+							
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 w_main_right">
+					
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">最新发布</h3>
+					  </div>
+					  <div class="panel-body">
+					    	<ul class="list-unstyled sidebar">				
+									<% newData.forEach(function(item){%>
+										<li><a href="/article_detail?aid=<%=item.id%>&cid=<%=item.chanelid%>"><%=item.title.substr(0,16)%></a></li>						
+									<% }) %>
+							</ul>
+					  </div>
+					</div>
+					
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">友情链接</h3>
+					  </div>
+					  <div class="panel-body">
+					    <div class="newContent">
+								<% include frendlink.ejs %>
+					    </div>
+					  </div>
+					</div>
+				</div>
+			
+			
+			</div>
+		</div>
+	</div>
+    <% include footer.ejs %>
+    <script src="/static/js/common.js"></script>
+	<div id="shape">
+		<div class="shapeColor">
+			<div class="shapeFly">
+			</div>
+		</div>
+	</div>    
+</body>
+</html>

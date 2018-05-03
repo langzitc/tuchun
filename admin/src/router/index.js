@@ -20,7 +20,6 @@ export default new Router({
     },
     {
       path: '/home',
-      name: 'Home',
   		component: function (resolve) {
   			require(['../components/Home.vue'],resolve);
       },
@@ -34,7 +33,118 @@ export default new Router({
         name: 'UserList',
         component: function (resolve) {
           require(['../components/UserList.vue'],resolve);
-        },        
+        }, 
+        meta: {
+        	title: '用户列表'
+        }
+      },{
+        path: 'chanellist',
+        name: 'ChanelList',
+        component: function (resolve) {
+          require(['../components/ChanelList.vue'],resolve);
+        }, 
+        meta: {
+        	title: '栏目列表'
+        }
+      },{
+        path: 'addchanel',
+        name: 'AddChanel',
+        component: function (resolve) {
+          require(['../components/AddChanel.vue'],resolve);
+        }, 
+        meta: {
+        	title: '添加栏目'
+        }
+      },{
+        path: 'chaneltype',
+        name: 'ChanelType',
+        component: function (resolve) {
+          require(['../components/ChanelType.vue'],resolve);
+        }, 
+        meta: {
+        	title: '栏目类型'
+        }
+      },{
+        path: 'template',
+        name: 'Template',
+        component: function (resolve) {
+          require(['../components/Template.vue'],resolve);
+        }, 
+        meta: {
+        	title: '模板管理'
+        }
+      },{
+        path: 'articlelist',
+        name: 'ArticleList',
+        component: function (resolve) {
+          require(['../components/ArticleList.vue'],resolve);
+        }, 
+        meta: {
+        	title: '文章列表'
+        }
+      },{
+        path: 'addarticle',
+        name: 'AddArticle',
+        component: function (resolve) {
+          require(['../components/AddArticle.vue'],resolve);
+        }, 
+        meta: {
+        	title: '文章管理'
+        }
+      },{
+        path: 'articletype',
+        name: 'ArticleType',
+        component: function (resolve) {
+          require(['../components/ArticleType.vue'],resolve);
+        }, 
+        meta: {
+        	title: '文章类型管理'
+        }
+      },{
+        path: 'classisic',
+        name: 'Classisic',
+        component: function (resolve) {
+          require(['../components/Classisic.vue'],resolve);
+        }, 
+        meta: {
+        	title: '分类管理'
+        }
+      },{
+        path: 'storylist',
+        name: 'StoryList',
+        component: function (resolve) {
+          require(['../components/StoryList.vue'],resolve);
+        }, 
+        meta: {
+        	title: '小说列表'
+        }
+      },{
+        path: 'talklist',
+        name: 'TalkList',
+        component: function (resolve) {
+          require(['../components/TalkList.vue'],resolve);
+        }, 
+        meta: {
+        	title: '评论列表'
+        }
+      },{
+        path: 'collecttask',
+        name: 'CollectTask',
+        component: function (resolve) {
+          require(['../components/CollectTask.vue'],resolve);
+        }, 
+        meta: {
+        	title: '任务列表'
+        }
+      },{
+        path: 'collectdata',
+        name: 'CollectData',
+        component: function (resolve) {
+          require(['../components/CollectTask.vue'],resolve);
+        }, 
+        meta: {
+        	title: '数据导入'
+        }
       }]
     }        
   ]

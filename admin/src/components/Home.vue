@@ -10,12 +10,15 @@
 .layout-logo{
     width: 100px;
     height: 30px;
-    background: #5b6270;
+    background: transparent;
     border-radius: 3px;
     float: left;
     position: relative;
     top: 15px;
     left: 20px;
+    img{
+    	height: 30px;
+    }
 }
 .layout-nav{
     width: 420px;
@@ -34,11 +37,13 @@
         <Layout>
             <Header>
                 <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo"></div>
+                    <div class="layout-logo">
+                    	<img src="../assets/logo2.png" alt="" />
+                    </div>
                     <div class="layout-nav">
                         <MenuItem name="1">
                             <Icon type="home"></Icon>
-                            首页
+                            <a href="/">首页</a>
                         </MenuItem>
                         <MenuItem name="2">
                             <Icon type="settings"></Icon>
@@ -68,10 +73,9 @@
                     </Menu>
                 </Sider>
                 <Layout :style="{padding: '0 24px 24px'}">
-                    <Breadcrumb :style="{margin: '24px 0'}">
-                        <BreadcrumbItem>Home</BreadcrumbItem>
-                        <BreadcrumbItem>Components</BreadcrumbItem>
-                        <BreadcrumbItem>Layout</BreadcrumbItem>
+                    <Breadcrumb :style="{margin: '24px 0'}" class="text-left">
+                    	<BreadcrumbItem :to="{ path: '/home' }">首页</BreadcrumbItem>
+                        <BreadcrumbItem v-for="(el,index) in routeList" v-show="index!==0" :to="{ name: el.name }" :key="index">{{el.meta.title}}</BreadcrumbItem>
                     </Breadcrumb>
                     <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
                         <transition name="app">
@@ -85,6 +89,8 @@
 </template>
 <script>
     import Menu from '../menu.js'
+    import { mapState } from 'vuex'
+    import { socket } from '../socket'
     export default {
         data () {
             return {
@@ -93,6 +99,11 @@
                 openNames: [1]
             }
         },
+		computed: {
+			...mapState({
+				routeList: state => state.routes
+			})
+		},        
         methods: {
             menuSelect (name) {
                 let c;

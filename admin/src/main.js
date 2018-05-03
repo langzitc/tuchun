@@ -37,6 +37,10 @@ axios.defaults.transformRequest = (data)=>{
   return;
 }
 axios.interceptors.response.use(function(response){
+		if(response.data.code === 502){
+			localStorage.removeItem('tuch_admin_user');
+			store.commit('updateUser',{});
+		}
 	  return response.data;
 },function(error){
     return Promise.reject(error);
@@ -44,6 +48,7 @@ axios.interceptors.response.use(function(response){
 axios.defaults.headers = {
 	'Content-type': 'application/x-www-form-urlencoded'
 }
+axios.defaults.withCredentials = true;
 let dataInit = ()=>{
   let user = localStorage.getItem('tuch_admin_user');
   if(user){
@@ -59,7 +64,7 @@ router.beforeEach((to,from,next)=>{
     return;
   }else if(to.name === 'Login' && store.state.isLogin) {
     router.push({
-      name: 'Home'
+      path: '/home'
     })
     return;
   }
@@ -68,6 +73,7 @@ router.beforeEach((to,from,next)=>{
 })
 router.afterEach((to) => {
   iView.LoadingBar.finish();
+  store.commit('routeInit',to.matched);
   window.scrollTo(0, 0);
 });
 Vue.prototype.$http = axios;

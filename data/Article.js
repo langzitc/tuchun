@@ -14,7 +14,7 @@ const Article = Connect.define('article', {
     allowNull: false
   },
   desc: {
-    type: Sequelize.STRING(50)
+    type: Sequelize.STRING(100)
   },
   keywords: {
     type: Sequelize.STRING(50)
@@ -38,6 +38,10 @@ const Article = Connect.define('article', {
   },
   content: {
     type: Sequelize.TEXT
+  },
+  hit: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   }
 }, 
 {

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="keywords" content="<%=keywords%>">
+    <meta name="description" content="<%=desc%>">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/moodList.css"/>
+    <link rel="stylesheet" href="/static/plugin/jquery.page.css">    
+	<link href="/static/favicon.ico" rel="shortcut icon" />    
+    <title><%=title%></title>
+</head>
+<body>
+    <% include header.ejs %>
+	<div class="w_container">
+		<div class="container">
+			<div class="row w_main_row">
+				
+				<ol class="breadcrumb w_breadcrumb">
+						<li><a href="/">首页</a></li>
+						<% if(chanel.length){%>
+						<% chanel.forEach((e,index)=>{ %>
+							<li><a href="/article_info?cid=e.id"><%=e.name%></a></li>
+						<% }) %>
+						<% } %>
+						<li class="active"><%=detail.title%></li>
+				  <span class="w_navbar_tip">我们长路漫漫，只因学无止境。</span>
+				</ol>
+				
+				<div class="col-lg-9 col-md-9 w_main_left">
+					<div class="panel panel-default">
+							<div class="panel-body contentList">
+								<% if(articleList.rows.length){%>
+									<% articleList.rows.forEach(function(item){ %>					  	
+									<div class="panel panel-default w_article_item">
+										<div class="panel-body">
+											<div class="row">
+													<div class="col-xs-6 col-md-3">
+														<a href="#" class="thumbnail w_thumbnail">
+															<img src="<%=item.img %>" alt="...">
+														</a>
+													</div>
+													<h4 class="media-heading">
+														<a class="title" href="/article_detail?aid=<%=item.id %>"><%=item.title%></a>
+													</h4>
+													<p><a class="label label-default">Nginx</a><a class="label label-default">tomcat负载均衡</a></p>
+													<p class="w_list_overview overView"><%=item.desc %></p>
+													<p class="count_r"><span class="count"><i class="glyphicon glyphicon-user"></i><a href="#"><%=item.author%></a></span> <span class="count"><i class="glyphicon glyphicon-eye-open"></i>阅读:<%=item.hit%></span><span class="count"><i class="glyphicon glyphicon-comment"></i>评论:2</span><span class="count"><i class="glyphicon glyphicon-time"></i><%=item.create_at.Format('yyyy-MM-dd hh:mm:ss')%></span></p>
+											</div>
+										</div>
+									</div>
+									<% }) %>
+									<% } %>
+										
+							<div class="page">
+								<nav aria-label="Page navigation">
+									<ul class="pagination">
+										<li>
+											<a href="#" aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+										<% for(let index = 1;index<pageCount+1;index++){ %>
+										<li class="<%=page==index ? 'active' : ''%>"><a href="/article_info?pageSize=10&page=<%=index%>"><%=index%></a></li>
+										<% } %>
+										<li>
+											<a href="#" aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
+							</div>
+							<!-- <div id="page">
+								
+							</div> -->
+							</div>
+					</div>
+					
+				</div>
+				<div class="col-lg-3 col-md-3 w_main_right">
+					
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">最新发布</h3>
+					  </div>
+					  <div class="panel-body">
+					    	<ul class="list-unstyled sidebar">				
+									<% newData.forEach(function(item){%>
+										<li><a href="/article_detail?aid=<%=item.id%>"><%=item.title.substr(0,16)%></a></li>						
+									<% }) %>
+								</ul>
+					  </div>
+					</div>
+					
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">友情链接</h3>
+					  </div>
+					  <div class="panel-body">
+					    <div class="newContent">
+							<% include frendlink.ejs %>
+					    </div>
+					  </div>
+					</div>
+				</div>
+			
+			
+			</div>
+		</div>
+	</div>
+    <% include footer.ejs %>
+	<div id="shape">
+		<div class="shapeColor">
+			<div class="shapeFly">
+			</div>
+		</div>
+	</div>    
+    <script type="text/javascript" src="/static/plugin/jquery.page.js"></script>
+    <script src="/static/js/common.js"></script>
+    <!--<script src="js/snowy.js"></script>-->
+    <script type="text/javascript">
+        
+    $(function(){
+        $("#page").Page({
+          totalPages: 7,//分页总数
+          liNums: 5,//分页的数字按钮数(建议取奇数)
+          activeClass: 'activP', //active 类样式定义
+          callBack : function(page){
+                //console.log(page)
+          }
+      });
+    })
+    </script>    
+</body>
+</html>
