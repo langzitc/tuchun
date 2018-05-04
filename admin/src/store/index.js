@@ -20,6 +20,7 @@ export default new Vuex.Store({
                 Object.assign(state.user,user);
                 state.isLogin = true;
             }else{
+                state.user = {};
                 state.isLogin = false;
             }
         },
@@ -61,6 +62,22 @@ export default new Vuex.Store({
                     throw new Error(e);
                 })                
             })
+        },
+        destory ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/public/user_destory').then(res=>{
+                    if(res.code === 200) {
+                        commit('updateUser',{});
+                        localStorage.removeItem('tuch_admin_user');
+                        resolve(res.msg);
+                    }else{
+                        reject(res.msg);
+                    }
+                }).catch(e=>{
+                    reject('注销失败');
+                    throw new Error(e);
+                })                
+            })            
         },
         getChanelType ({commit}) {
             return new Promise((resolve,reject)=>{

@@ -13,6 +13,7 @@ import Picture from '../api/picture';
 import Shuoshuo from '../api/shuoshuo';
 import multer from 'multer';
 import qn from 'qn';
+import ueditor from 'ueditor';
 import config from '../config/db'
 import fs from 'fs';
 import path from "path";
@@ -62,13 +63,11 @@ router.use("/api/upload/fileupload",upload.single('file'),(req,res,next)=>{
 router.use("/api/upload/qnupload",(req,res,next)=>{
     let client = qn.create(config.qn_config);
     qnupload.single('file')(req,res,(err)=>{
-        console.log(req.file);
         if(err){
             res.json({
                 code: 503,
                 msg: err.toString()
             });
-            console.log(err,1);
         }
         if(req.file&&req.file.buffer){
             let fileFormat = (req.file.originalname).split("."); 
@@ -88,7 +87,6 @@ router.use("/api/upload/qnupload",(req,res,next)=>{
                     msg: '上传成功',
                     path: config.static_server_url+filePath
                 });                
-                console.log(result,3)
             });            
         }
     })
@@ -104,4 +102,23 @@ router.use("/api/talk/:param",Talk);
 router.use("/api/crawler/:param",Crawler);
 router.use("/api/shuoshuo/:param",Shuoshuo);
 router.use("/api/picture/:param",Picture);
+router.use("/ueditor/ue",ueditor(path.join(__dirname, 'public'),{
+    qn: config.qn_config   
+},(req,res,next)=>{
+    let imgDir = '/img/ueditor/'
+    if(req.query.action === 'uploadimage'){
+        let foo = req.ueditor;
+        let imgname = req.ueditor.filename;
+        res.ue_up(imgDir);
+    }
+    //  客户端发起图片列表请求
+    else if (req.query.action === 'listimage'){ 
+        res.ue_list(imgDir);  // 客户端会列出 dir_url 目录下的所有图片
+    }
+    // 客户端发起其它请求
+    else {
+        res.setHeader('Content-Type', 'application/json');
+        res.redirect('/ueditor/ueditor.config.json')
+    }    
+}))
 export default router;

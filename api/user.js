@@ -12,6 +12,23 @@ export default async function (req,res,next) {
                     msg: '保存成功'
                 })                
             break;
+            case "update_password": 
+                let uu = await User.findById(req.body.id);
+                if(md5(uu.password === md5(req.body.oldpassword))){
+                    await uu.updateAttributes({
+                        password: newpassword
+                    });
+                    res.json({
+                        code: 200,
+                        msg: '密码修改成功'
+                    })                     
+                }else{
+                    res.json({
+                        code: 505,
+                        msg: '旧密码输入错误'
+                    })                     
+                }              
+            break;            
             case "del_user": 
                 let f = await Connect.transaction(t=>{
                     return  User.destroy({

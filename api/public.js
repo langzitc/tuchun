@@ -18,11 +18,12 @@ export default async function (req,res,next) {
                     size: 6,// 验证码长度
                     ignoreChars: '0o1i', // 验证码字符中排除 0o1i
                     noise: 2, // 干扰线条的数量
-                    height: 40 
+                    height: 30,
+                    width: 100 
                 }
                 let captchas = svgCaptcha.create(codeConfig);
                 req.session.captcha_code = captchas.text.toLowerCase();
-                res.send({
+                res.json({
                     img: captchas.data
                 })
             break;   
@@ -30,29 +31,30 @@ export default async function (req,res,next) {
                 let user = await User.login(req.body.username,md5(req.body.password));
                 req.session.user = user.dataValues;
                 if(user.dataValues){
+                    req.session.login_count = 0;
                     res.json({
                         code: 200,
                         msg: '登录成功',
                         data: user.dataValues
                     })
-                    req.session.login_count = 0;
                     return;                
-                }
-                let captcha = false;
-                if(req.session.login_count){
-                    req.session.login_count = parseInt(req.session.login_count)+1;
-                    if(parseInt(req.session.login_count)>3){
-                        captcha = true;
-                    }
                 }else{
-                    req.session.login_count = 1;
-                }
-                res.json({
-                    code: 503,
-                    captcha,
-                    msg: '登录失败',
-                    data: {}
-                })            
+                    let captcha = false;
+                    if(req.session.login_count){
+                        req.session.login_count = parseInt(req.session.login_count)+1;
+                        if(parseInt(req.session.login_count)>3){
+                            captcha = true;
+                        }
+                    }else{
+                        req.session.login_count = 1;
+                    }
+                    res.json({
+                        code: 503,
+                        captcha,
+                        msg: '登录失败',
+                        data: {}
+                    })                     
+                }           
             break;
             case "user_register": 
                 let users = User.build(req.body);
@@ -216,7 +218,7 @@ export default async function (req,res,next) {
                 let ssD = await axios.get('http://tingapi.ting.baidu.com/v1/restserver/ting',{params:req.body});
                 res.json({
                     msg: '查询成功',
-                    data: ssD.data
+                    data: ssD.data||ssD
                 });
             break;         
         }        
@@ -225,5 +227,6 @@ export default async function (req,res,next) {
             code: 503,
             msg: e.toString()
         })
+        throw new Error(e)
     }
 }

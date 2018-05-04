@@ -32,7 +32,7 @@
 				        type="drag"
 				        :with-credentials="true"
 				        :on-success="uploadSuccess"
-				        action="/api/upload/qnupload">
+				        :action="uploadAction">
 				        <div v-if="formValidate.avastar" class="text-center upload-show-img">
 				        	<img :src="formValidate.avastar" alt="" width="100px" height="100px"/>
 				        </div>
@@ -100,6 +100,11 @@
 			},
 			status (v) {
 				this.$emit('input', v);
+			}
+		},
+		computed: {
+			uploadAction () {
+				return API_PATH+"/upload/qnupload";
 			}
 		},
 		methods: {

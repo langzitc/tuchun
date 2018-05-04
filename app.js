@@ -50,13 +50,14 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/logger.lo
 app.use(morgan('short', {stream: accessLogStream}));
 app.use("/apidoc",express.static('apidoc'));
 app.use("/static",express.static('static'));
+app.use("/public",express.static('public'));
 app.use("/upload",express.static(path.join("./", 'upload')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", 'ejs');
 app.set('views', __dirname + '/page');
 app.all('/api/:chanel/*', function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+	res.header("Access-Control-Allow-Origin", "http://localhost:8082");
 	res.header('Access-Control-Allow-Credentials', 'true');
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");

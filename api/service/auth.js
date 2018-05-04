@@ -4,6 +4,7 @@ const exincludePath = [
     "public/user_login",
     "public/user_register",
     "public/search_song",
+    "public/get_capatcha",
     "user/test"
 ]
 export default function Auth (req,res,next) {
@@ -28,6 +29,8 @@ export default function Auth (req,res,next) {
                         msg: '请输入图形验证码'
                     })
                 }
+            }else{
+                next();
             }              
         }else{
             next();

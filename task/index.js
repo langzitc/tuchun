@@ -64,11 +64,11 @@ function CrawlerInit () {
     }
 }
 export function SystemTask () {
-    let rule = new schedule.RecurrenceRule();
-    rule.second = 50;
-    schedule.scheduleJob(rule,()=>{
-        console.log((new Date()).getSeconds())
-    })
+    // let rule = new schedule.RecurrenceRule();
+    // rule.second = 50;
+    // schedule.scheduleJob(rule,()=>{
+    //     console.log((new Date()).getSeconds())
+    // })
 }
 export function StartTask (filename,socket) {
     let crawlerTask = new Crawler({
