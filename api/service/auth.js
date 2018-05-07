@@ -5,7 +5,7 @@ const exincludePath = [
     "public/user_register",
     "public/search_song",
     "public/get_capatcha",
-    "user/test"
+    "article/list_article"
 ]
 export default function Auth (req,res,next) {
     if(!req.session.sid){
@@ -20,12 +20,14 @@ export default function Auth (req,res,next) {
                     }else{
                         res.json({
                             code: 506,
+                            captcha: true,
                             msg: '图形验证码错误'
                         })
                     }
                 }else{
                     res.json({
                         code: 505,
+                        captcha: true,
                         msg: '请输入图形验证码'
                     })
                 }
@@ -37,7 +39,7 @@ export default function Auth (req,res,next) {
         }
     } else if (!req.session.user) {
         res.json({
-            code: 502,
+            code: 507,
             msg: '请登录'
         })
     } else{

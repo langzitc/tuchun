@@ -5,16 +5,16 @@ export default async function (req,res,next) {
     try{
         switch (req.params.param) {       
             case "update_user": 
-                let uu = await User.findById(req.body.id);
-                await uu.updateAttributes(req.body);
+                let uup = await User.findById(req.body.id);
+                await uup.updateAttributes(req.body);
                 res.json({
                     code: 200,
                     msg: '保存成功'
                 })                
             break;
             case "update_password": 
-                let uu = await User.findById(req.body.id);
-                if(md5(uu.password === md5(req.body.oldpassword))){
+                let uud = await User.findById(req.body.id);
+                if(md5(uud.password === md5(req.body.oldpassword))){
                     await uu.updateAttributes({
                         password: newpassword
                     });

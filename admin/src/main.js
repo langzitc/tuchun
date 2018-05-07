@@ -37,9 +37,12 @@ axios.defaults.transformRequest = (data)=>{
   return;
 }
 axios.interceptors.response.use(function(response){
-		if(response.data.code === 502){
+		if(response.data.code === 507){
 			localStorage.removeItem('tuch_admin_user');
 			store.commit('updateUser',{});
+      router.push({
+        name: "Login"
+      });
 		}
 	  return response.data;
 },function(error){

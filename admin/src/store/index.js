@@ -12,7 +12,9 @@ export default new Vuex.Store({
         chanelList: [],
         chanelTreeList: [],
         templateList: [],
-        classicList: []
+        classicList: [],
+        captcha: false,
+        svgCode: ''
 	},
 	mutations: {
 		updateUser (state,user) {
@@ -44,10 +46,16 @@ export default new Vuex.Store({
         },
         setClassicList (state, payload) {
         	state.classicList = payload;
+        },
+        setCode (state,code) {
+            state.svgCode = code;
+        },
+        setCaptcha (state, status) {
+            state.captcha = status;
         }
 	},
 	actions: {
-		login ({commit},param) {
+		login ({commit,dispatch},param) {
             return new Promise((resolve,reject)=>{
                 axios.post('/public/user_login',param).then(res=>{
                     if(res.code === 200) {
@@ -55,13 +63,28 @@ export default new Vuex.Store({
                         localStorage.setItem('tuch_admin_user',JSON.stringify(res.data));
                         resolve(res.msg);
                     }else{
-                        reject(res.msg);
+                        if(res.captcha){
+                            dispatch('getCode');
+                            commit('setCaptcha',true);
+                            reject('请输入验证码');
+                        }else{
+                            reject(res.msg);
+                        }
                     }
                 }).catch(e=>{
                     reject('登录失败');
                     throw new Error(e);
                 })                
             })
+        },
+        getCode ({commit}) {
+            return new Promise((resolve,reject)=>{
+                axios.post('/public/get_capatcha').then(res=>{
+                    commit('setCode',res.img);
+                }).catch(e=>{
+                    throw new Error(e);
+                })                
+            })            
         },
         destory ({commit}) {
             return new Promise((resolve,reject)=>{

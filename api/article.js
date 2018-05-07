@@ -69,6 +69,7 @@ export default async function (req,res,next) {
                         as: 'articleType'
                     }]                    
                 });
+                console.log(articleList);
                 res.json({
                     code: 200,
                     data: articleList

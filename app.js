@@ -57,7 +57,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", 'ejs');
 app.set('views', __dirname + '/page');
 app.all('/api/:chanel/*', function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "http://localhost:8082");
+	res.header("Access-Control-Allow-Origin", "http://localhost:3000");
 	res.header('Access-Control-Allow-Credentials', 'true');
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");

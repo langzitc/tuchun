@@ -9,6 +9,13 @@
             <FormItem label="密码" prop="password">
                 <Input size="large" type="password" v-model="models.password" placeholder="请输入密码"></Input>
             </FormItem>
+            <FormItem label="验证码" prop="captcha_code" v-if="captcha">
+                <Input size="large" type="text" v-model="models.captcha_code"></Input>
+                <div style="position:absolute;right:0;top:-15px">
+                    <span v-html="svgCode"></span>
+                    <Button type="warning" @click="getCode">换一张</Button>                  
+                </div>
+            </FormItem>            
             <FormItem>
                 <Button size="large" type="info" long @click="login" :loading="isLoading">登录</Button>
             </FormItem>                        
@@ -17,13 +24,15 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Login',
   data () {
       return {
           models: {
               username: "",
-              password: ""
+              password: "",
+              captcha_code: ""
           },
           rules: {
               username: [{
@@ -33,10 +42,20 @@ export default {
               password: [{
                   required: true,
                   message: '密码不能为空'
-              }]
+              }],
+              captcha_code: [{
+                  required: true,
+                  message: '验证码不能为空'
+              }]              
           },
           isLoading: false
       }
+  },
+  computed: {
+    ...mapState({
+        svgCode : state => state.svgCode,
+        captcha: state => state.captcha            
+    })
   },
   methods: {
       login () {
@@ -55,6 +74,9 @@ export default {
                   });
               }
           })
+      },
+      getCode () {
+          this.$store.dispatch("getCode");
       }
   },
   mounted () {
@@ -112,7 +134,7 @@ export default {
         .login-box{
             position: absolute;
             width: 300px;
-            height: 280px;
+            min-height: 280px;
             left: 50%;
             top: 50%;
             transform: translate(-50%,-50%);

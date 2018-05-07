@@ -29,8 +29,8 @@ export default async function (req,res,next) {
             break;   
             case "user_login":           
                 let user = await User.login(req.body.username,md5(req.body.password));
-                req.session.user = user.dataValues;
-                if(user.dataValues){
+                if(user&&user.dataValues){
+                    req.session.user = user.dataValues;
                     req.session.login_count = 0;
                     res.json({
                         code: 200,

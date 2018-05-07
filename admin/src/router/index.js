@@ -145,6 +145,15 @@ export default new Router({
         meta: {
         	title: '数据导入'
         }
+      },{
+        path: 'picturelist',
+        name: 'PictureList',
+        component: function (resolve) {
+          require(['../components/PictureList.vue'],resolve);
+        }, 
+        meta: {
+        	title: '相册管理'
+        }
       }]
     }        
   ]

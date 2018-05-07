@@ -94,7 +94,7 @@
                 </Menu>
             </Header>
             <Layout>
-                <Sider hide-trigger :style="{background: '#fff'}">
+                <Sider hide-trigger :style="{background: '#fff'}" class="left-nav">
                     <Menu :active-name="index" theme="dark" width="auto" @on-select="menuSelect" :open-names="openNames">
                         <Submenu :name="el.id" v-for="el in Menu" :key="el.id">
                             <template slot="title">

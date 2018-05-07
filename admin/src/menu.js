@@ -75,9 +75,24 @@ export default [{
     }]
 },{
     id: 6,
-    label: '系统设置',
+    label: '资源管理',
     icon: 'ios-navigate',
-    component: 'SystemSet'
+    children: [{
+        id: 61,
+        icon: 'ios-navigate',
+        label: '相册',
+        component: 'PictureList'
+    },{
+        id: 62,
+        icon: 'ios-navigate',
+        label: '图片',
+        component: 'Picture'
+    },{
+        id: 63,
+        icon: 'ios-navigate',
+        label: '文档',
+        component: 'Document'
+    }]
 },{
     id: 7,
     label: '数据库管理',
@@ -122,5 +137,20 @@ export default [{
         icon: 'ios-navigate',
         label: '分类管理',
         component: 'Classisic'
+    }]
+},{
+    id: 10,
+    label: '说说管理',
+    icon: 'ios-navigate',
+    children: [{
+        id: 101,
+        icon: 'ios-navigate',
+        label: '说说',
+        component: 'Shuoshuo'
+    },{
+        id: 102,
+        icon: 'ios-navigate',
+        label: '留言',
+        component: 'Liuyan'
     }]
 }]
